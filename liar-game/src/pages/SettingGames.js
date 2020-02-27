@@ -58,15 +58,16 @@ class SettingGames extends Component {
     }
 
     return (
-      
-      <div className="">
-        <div className="lg_title01">Liar Games</div>
+
+      <div className="lg_container01">
+        <p className="lg_title01">Liar Games</p>
         <div className="lg_btn01">
           <button>그림 맞추기</button>
-        </div>
-        <div className="lg_btn01">
           <button>단어 맞추기</button>
         </div>
+        {/* <div className="lg_btn01">
+          <button>단어 맞추기</button>
+        </div> */}
         <div className="lg_slectbox">
           <Select
             value={selectedOption_people}
@@ -75,6 +76,10 @@ class SettingGames extends Component {
             options={ people_options }
             placeholder="인원 수"
           />
+          <Select
+            placeholder="게임 주제"
+            options = {title_options}
+          />
           {/* <Select
             value={ selectedOption_title }
             name="game_title"
@@ -82,6 +87,17 @@ class SettingGames extends Component {
             options={ title_options }
             placeholder="게임 주제"
           /> */}
+        </div>
+        {/* 스파이모드 선택 */}
+        <div className="lg_round">
+          <input type="checkbox" id="checkbox" />
+          <label htmlFor="checkbox">
+            <p>스파이모드</p>
+            <span className="lg_question"></span>
+          </label>
+        </div>
+        <div className="lg_btn02">
+          <button>시작하기</button>
         </div>
       </div>
     );

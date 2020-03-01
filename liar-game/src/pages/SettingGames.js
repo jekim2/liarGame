@@ -30,10 +30,12 @@ class SettingGames extends Component {
   };
 
   handleChange = selectedOption_people => {
-      this.setState(
-        { selectedOption_people },
-        () => console.log(`Option selected:`, this.state.selectedOption_people)
-      );
+    this.httpGet("movie");
+    console.log("selectedOption_people >>> " , selectedOption_people);
+      // this.setState(
+      //   { selectedOption_people },
+      //   () => console.log(`Option selected:`, this.state.selectedOption_people)
+      // );
 
     // if (e.option === "title") {
     //   this.setState(
@@ -43,6 +45,75 @@ class SettingGames extends Component {
     // } else {
     // }
   };
+
+  httpGet(type) {
+
+
+    const request = require('request');
+    // const querystring = require('querystring');
+
+    // let str = '과일 종류';
+    // // let encodedStr = querystring.escape(str);
+
+    // let kakaoOptions = {
+    //   // uri:`https://dapi.kakao.com/v2/local/search/keyword.json?query=${str}`,
+    //   // uri:`https://dapi.kakao.com/v2/search/web?query=${str}`,
+    //   method:'GET',
+    //   headers:{
+    //           'Authorization': 'KakaoAK ef5135ef7fc05129d26e9d4d61d63363'
+    //   },
+    //   encoding:'utf-8'
+    // }
+
+    const uri ='http://openapi.jbfood.go.kr:8080/openapi/service/FoodDictionaryService/getFoodDictionary?ServiceKey=mvg2sTC9kU65ua19lKF4rKgRUqciZrN4f6GzpZlijmhUDAQWN9Jboi1HwvFBuJ2a6ylNdmKNhOHQlHJJdulBqw';
+
+    let foodOption = {
+      // uri : 'http://openapi.jbfood.go.kr:8080/openapi/service/FoodDictionaryService/getFoodDictionary?ServiceKey=mvg2sTC9kU65ua19lKF4rKgRUqciZrN4f6GzpZlijmhUDAQWN9Jboi1HwvFBuJ2a6ylNdmKNhOHQlHJJdulBqw',	
+      method : 'GET',
+      // key : "mvg2sTC9kU65ua19lKF4rKgRUqciZrN4f6GzpZlijmhUDAQWN9Jboi1HwvFBuJ2a6ylNdmKNhOHQlHJJdulBqw%3D%3D"
+    }
+
+    
+ 
+
+
+    function callback(error,res, body){
+      console.log(res);
+      console.log(body)
+    }
+    request(uri,callback);
+    // const KEY  = "ef5135ef7fc05129d26e9d4d61d63363";
+    // switch (type) {
+    //   case "movie":
+    //     const uri = "https://dapi.kakao.com/v2/search/web?query=" + type + "?Authorization="  + KEY ;
+    //     https.get(uri, {
+    //       // hostname: 'api.cognitive.microsoft.com',
+    //       // path:     '/bing/v7.0/search?q=' + encodeURIComponent(query),
+    //       // headers:  { 'Ocp-Apim-Subscription-Key': SUBSCRIPTION_KEY },
+    //     }, res => {
+    //       let body = ''
+    //       res.on('data', part => body += part)
+    //       res.on('end', () => {
+    //         for (var header in res.headers) {
+    //           if (header.startsWith("bingapis-") || header.startsWith("x-msedge-")) {
+    //             console.log(header + ": " + res.headers[header])
+    //           }
+    //         }
+    //         console.log('\nJSON Response:\n')
+    //         console.dir(JSON.parse(body), { colors: false, depth: null })
+    //       })
+    //       res.on('error', e => {
+    //         console.log('Error: ' + e.message)
+    //         throw e
+    //       })
+    //     })
+        
+    //     break;
+    
+    //   default:
+    //     break;
+    // }
+  }
 
   render() {
     const { selectedOption_people } = this.state;
@@ -69,7 +140,7 @@ class SettingGames extends Component {
           <button>단어 맞추기</button>
         </div> */}
         <div className="lg_slectbox">
-          <Select
+          <Select readonly 
             value={selectedOption_people}
             name="people_number"
             onChange={this.handleChange}
@@ -78,6 +149,7 @@ class SettingGames extends Component {
           />
           <Select
             placeholder="게임 주제"
+            onChange={this.handleChange}
             options = {title_options}
           />
           {/* <Select

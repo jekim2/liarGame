@@ -13,6 +13,14 @@ const title_options = [
   { value: 'cookies', label: '과자' , option: 'title'},
 ];
 
+const setting_infos = {
+  type : '1',           // 0 : 그림맞추기 , 1 : 단어맞추기,
+  people : 3,           // 인원 수
+  title : '',           // 게임 주제 : movie, cupNoodle, cookie, iceCream , food , fruit , exercise, singer, actor , title_song
+  info : [],            // 주제어,
+  spy : false           // true : spy , false : spy X
+}
+
 
 // const people_options = test.map(v => ({
 //   label: v,
@@ -30,7 +38,7 @@ class SettingGames extends Component {
   };
 
   handleChange = selectedOption_people => {
-    this.httpGet("movie");
+    this.httpGet("movie","20191215");
     console.log("selectedOption_people >>> " , selectedOption_people);
       // this.setState(
       //   { selectedOption_people },
@@ -46,18 +54,38 @@ class SettingGames extends Component {
     // }
   };
 
-  httpGet(type) {
-
-
+  httpGet(type , addInfo) {
+    
     const request = require('request');
-    // const querystring = require('querystring');
+    let CLIENT_KEY = "";
+    let aInfo = addInfo;
+    switch (type) {
+      case "movie":
+        CLIENT_KEY = '4a7dad029a526f561f97b23a72f1f410';
+        request({
+          // url : `http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json?key=4a7dad029a526f561f97b23a72f1f410&openStartDt=2018&openEndDt=2019`,
+          url : `http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchWeeklyBoxOfficeList.json?key=${CLIENT_KEY}&targetDt=${aInfo}&weekGb=0`,
+          type : 'get',
+        }, function(error,res, body){
+          // console.log(res);
+          console.log(body);
+        });
+        // cf. http://www.kobis.or.kr/kobisopenapi/homepg/apiservice/searchServiceInfo.do
+        break;
+      default:
+        break;
+    }
 
-    // let str = '과일 종류';
+
+
+    // // const querystring = require('querystring');
+
+    // let str = '베테랑';
     // // let encodedStr = querystring.escape(str);
 
     // let kakaoOptions = {
     //   // uri:`https://dapi.kakao.com/v2/local/search/keyword.json?query=${str}`,
-    //   // uri:`https://dapi.kakao.com/v2/search/web?query=${str}`,
+    //   uri:`https://dapi.kakao.com/v2/search/web?query=${str}`,
     //   method:'GET',
     //   headers:{
     //           'Authorization': 'KakaoAK ef5135ef7fc05129d26e9d4d61d63363'
@@ -65,54 +93,131 @@ class SettingGames extends Component {
     //   encoding:'utf-8'
     // }
 
-    const uri ='http://openapi.jbfood.go.kr:8080/openapi/service/FoodDictionaryService/getFoodDictionary?ServiceKey=mvg2sTC9kU65ua19lKF4rKgRUqciZrN4f6GzpZlijmhUDAQWN9Jboi1HwvFBuJ2a6ylNdmKNhOHQlHJJdulBqw';
-
-    let foodOption = {
-      // uri : 'http://openapi.jbfood.go.kr:8080/openapi/service/FoodDictionaryService/getFoodDictionary?ServiceKey=mvg2sTC9kU65ua19lKF4rKgRUqciZrN4f6GzpZlijmhUDAQWN9Jboi1HwvFBuJ2a6ylNdmKNhOHQlHJJdulBqw',	
-      method : 'GET',
-      // key : "mvg2sTC9kU65ua19lKF4rKgRUqciZrN4f6GzpZlijmhUDAQWN9Jboi1HwvFBuJ2a6ylNdmKNhOHQlHJJdulBqw%3D%3D"
-    }
-
-    
- 
-
-
-    function callback(error,res, body){
-      console.log(res);
-      console.log(body)
-    }
-    request(uri,callback);
-    // const KEY  = "ef5135ef7fc05129d26e9d4d61d63363";
-    // switch (type) {
-    //   case "movie":
-    //     const uri = "https://dapi.kakao.com/v2/search/web?query=" + type + "?Authorization="  + KEY ;
-    //     https.get(uri, {
-    //       // hostname: 'api.cognitive.microsoft.com',
-    //       // path:     '/bing/v7.0/search?q=' + encodeURIComponent(query),
-    //       // headers:  { 'Ocp-Apim-Subscription-Key': SUBSCRIPTION_KEY },
-    //     }, res => {
-    //       let body = ''
-    //       res.on('data', part => body += part)
-    //       res.on('end', () => {
-    //         for (var header in res.headers) {
-    //           if (header.startsWith("bingapis-") || header.startsWith("x-msedge-")) {
-    //             console.log(header + ": " + res.headers[header])
-    //           }
-    //         }
-    //         console.log('\nJSON Response:\n')
-    //         console.dir(JSON.parse(body), { colors: false, depth: null })
-    //       })
-    //       res.on('error', e => {
-    //         console.log('Error: ' + e.message)
-    //         throw e
-    //       })
-    //     })
-        
-    //     break;
-    
-    //   default:
-    //     break;
+    //  function callback(error,res, body){
+    //   console.log(res);
+    //   console.log(body)
     // }
+    // request(kakaoOptions,callback);
+
+
+    // const option = {
+    //   uri : `https://openapi.naver.com/v1/search/movie.json?query=${str}`,
+    //   method: 'GET',
+    //   headers : {
+    //     'X-Naver-Client-Id' : 'H0CLikr465hhOVkwJm2Q',
+    //     'X-Naver-Client-Secret' : 'yXJORf7cvO'
+    //   },
+    // }
+
+    // function callback(error,res, body){
+    //   console.log(JSON.stringify(res));
+    //   console.log(JSON.stringify(body));
+    //   console.log(JSON.stringify(error));
+    // }
+    // request(option,callback);
+
+    
+    // // 영화 client id
+    // // const mClient_id = "4a7dad029a526f561f97b23a72f1f410";
+
+    // const option = {
+    //   url : 'http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchWeeklyBoxOfficeList.json?key=4a7dad029a526f561f97b23a72f1f410&targetDt=20191201&weekGb=0',
+    //   type : 'get',
+    // }
+
+    // function callback(error,res, body){
+    //   console.log(JSON.stringify(res));
+    //   // console.log(JSON.stringify($.parseJSON(body)));
+    //   // console.log(JSON.stringify(error));
+    // }
+    // request(option,callback);
+
+
+
+
+
+    // const uri ='http://openapi.jbfood.go.kr:8080/openapi/service/FoodDictionaryService/getFoodDictionary?ServiceKey=mvg2sTC9kU65ua19lKF4rKgRUqciZrN4f6GzpZlijmhUDAQWN9Jboi1HwvFBuJ2a6ylNdmKNhOHQlHJJdulBqw';
+
+    // let foodOption = {
+    //   // uri : 'http://openapi.jbfood.go.kr:8080/openapi/service/FoodDictionaryService/getFoodDictionary?ServiceKey=mvg2sTC9kU65ua19lKF4rKgRUqciZrN4f6GzpZlijmhUDAQWN9Jboi1HwvFBuJ2a6ylNdmKNhOHQlHJJdulBqw',	
+    //   method : 'GET',
+    //   // key : "mvg2sTC9kU65ua19lKF4rKgRUqciZrN4f6GzpZlijmhUDAQWN9Jboi1HwvFBuJ2a6ylNdmKNhOHQlHJJdulBqw%3D%3D"
+    // }
+
+    // const client_id = "la9V3Vf9ibIJhOS5r5aa";
+    // const client_secret = "gajYALWiMV";
+
+    // const uri = `https://openapi.naver.com/v1/search/movie.json?query=${str}`;
+ 
+    // const option = {
+    //   uri : uri,
+    //   method: 'GET',
+    //   headers : {
+    //     'X-Naver-Client-Id' : client_id,
+    //     'X-Naver-Client-Secret' : client_secret
+    //   }
+    // }
+
+    // function callback(error,res, body){
+    //   console.log(res);
+    //   console.log(body)
+    // }
+    // request(option,callback);
+
+
+    // const request = require('request');
+    // const NAVER_CLIENT_ID     = 'la9V3Vf9ibIJhOS5r5aa';
+    // const NAVER_CLIENT_SECRET = 'gajYALWiMV';
+    // // const option = {
+    // //   query  :'최신 영화', //이미지 검색 텍스트
+    // //   start  :1, //검색 시작 위치
+    // //   display:50, //가져올 이미지 갯수
+    // // }
+
+    // let str = '베테랑';
+    
+    // request.get({
+    //   uri:`https://openapi.naver.com/v1/search/movie.json?query=${str}`,
+    //   // qs :option,
+    //   headers:{
+    //     'X-Naver-Client-Id':NAVER_CLIENT_ID,
+    //     'X-Naver-Client-Secret':NAVER_CLIENT_SECRET,
+    //   },
+    //   mode : 'no-cors',
+    //   encoding:'utf-8'
+    // }, function(err, res, body) {
+    //   // let json = JSON.parse(body) //json으로 파싱
+    //   console.log(JSON.stringify(res));
+    // });
+
+    // const express = require('express');
+    // const app = express();
+//     const client_id = 'la9V3Vf9ibIJhOS5r5aa';
+//     const client_secret = 'gajYALWiMV';
+//     const str ='베테랑';
+//   // app.get('/search/blog', function (req, res) {
+//    const api_url = `https://openapi.naver.com/v1/search/movie.json?query=${str}`; // json 결과
+// //   const api_url = 'https://openapi.naver.com/v1/search/blog.xml?query=' + encodeURI(req.query.query); // xml 결과
+//    const request = require('request');
+//    const options = {
+//        url: api_url,
+//       //  mode : 'no-cors',
+//        headers: {'X-Naver-Client-Id':client_id, 'X-Naver-Client-Secret': client_secret}
+//     };
+//    request.get(options, function (error, response, body) {
+//      console.log(error);
+//      console.log(response);
+//      console.log(body);
+//     //  if (!error && response.statusCode == 200) {
+//     //    res.writeHead(200, {'Content-Type': 'text/json;charset=utf-8'});
+//     //    res.end(body);
+//     //  } else {
+//     //    res.status(response.statusCode).end();
+//     //    console.log('error = ' + response.statusCode);
+//     //  }
+//    });
+//  });
+
   }
 
   render() {
@@ -120,7 +225,7 @@ class SettingGames extends Component {
 
     // const { selectedOption_title } = this.state;
 
-    for (var i = 3; i< 21; i++) {
+    for (let i = 3; i< 21; i++) {
       people_options.push({
         'value' : i,
         'label' : i + "명",

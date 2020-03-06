@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Select from 'react-select';
 
 
-const people_options = [];
+let people_options = [];
   // { value: '3', label: '3_people' },
   // { value: 'strawberry', label: 'Strawberry' },
   // { value: 'vanilla', label: 'Vanilla' },
@@ -11,43 +11,60 @@ const title_options = [
   { value: 'movie', label: '영화', option: 'title' },
   { value: 'sing', label: '가요' ,  option: 'title'},
   { value: 'cookies', label: '과자' , option: 'title'},
+  { value: 'drama', label: '드라마' , option: 'title'},
+  { value: 'cupNoodle', label: '컵라면' , option: 'title'},
+  { value: 'cookie', label: '과자' , option: 'title'},
+  { value: 'iceCream', label: '아이스크림' , option: 'title'},
+  { value: 'food', label: '음식' , option: 'title'},
+  { value: 'fruit', label: '과일' , option: 'title'},
+  { value: 'exercise', label: '운동' , option: 'title'},
+  { value: 'singer', label: '가수' , option: 'title'},
+  { value: 'actor', label: '배우' , option: 'title'},
+  { value: 'title_song', label: '가요 제목' , option: 'title'}
 ];
 
-const setting_infos = {
-  // type : '1',           // 0 : 그림맞추기 , 1 : 단어맞추기,
-  people : 3,           // 인원 수
-  title : '',           // 게임 주제 : movie, cupNoodle, cookie, iceCream , food , fruit , exercise, singer, actor , title_song
-  info : "",            // 주제어,
-  spy : false           // true : spy , false : spy X
-}
-
-
-// const people_options = test.map(v => ({
-//   label: v,
-//   value: v
-// }));
+// const setting_infos = {
+//   total : 3,           // 인원 수
+//   category : '',       // 게임 주제 :drama, movie, cupNoodle, cookie, iceCream , food , fruit , exercise, singer, actor , title_song
+//   keyword : "",        // 주제어,
+//   spy : false           // true : spy , false : spy X
+// }
 
 
 
 class SettingGames extends Component {
   state = {
     selectedOption_people: null,
-    movieList : []
-
+    movieList : [],
+    total : 3,
+    category : ''
+    // setting_infos : {
+    //   total : 3,           // 인원 수
+    //   category : '',       // 게임 주제 :drama, movie, cupNoodle, cookie, iceCream , food , fruit , exercise, singer, actor , title_song
+    //   keyword : "",        // 주제어,
+    //   spy : false           // true : spy , false : spy X
+    // }
   };
 
-  handleChange = selectedOption_people => {
-    this.httpGet("movie","20191215");
-    console.log("selectedOption_people >>> " , selectedOption_people);
-      this.setState(
-        { selectedOption_people },
-        () => console.log(`Option selected:`, this.state.selectedOption_people)
-      );
-  };
+  constructor(props) {
+    super(props);
+    this.settingInfos = this.settingInfos.bind(this);
+    this.sendInfo = this.sendInfo.bind(this);
+    // this.setTitle = this.setTitle.bind(this);
+  }
+
+  // handleChange = selectedOption_people => {
+  //   // this.httpGet("movie","20191215");
+  //   this.state.setting_infos['total'] = this.state.selectedOption_people;
+  //   // console.log("selectedOption_people >>> " , selectedOption_people);
+  //     this.setState( {setting_infos: this.state.setting_infos['total'] });
+
+  //     console.log("selectedOption_people >>> " , this.state.setting_infos['total']);
+  // };
 
   httpGet(type , addInfo) {
 
-    const that = this;
+    // const that = this;
 
     const request = require('request');
     let CLIENT_KEY = "";
@@ -60,6 +77,7 @@ class SettingGames extends Component {
           url : `http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchWeeklyBoxOfficeList.json?key=${CLIENT_KEY}&targetDt=${aInfo}&weekGb=0`,
           type : 'get',
         }, function(error,res, body){
+
           // if (body !== null  && body !== undefined) {
           //   // that.setMovieList(body.boxOfficeResult.weeklyBoxOfficeList);
           // }
@@ -68,6 +86,7 @@ class SettingGames extends Component {
         });
         // cf. http://www.kobis.or.kr/kobisopenapi/homepg/apiservice/searchServiceInfo.do
         break;
+      case "drama":
       default:
         break;
     }
@@ -88,20 +107,28 @@ class SettingGames extends Component {
     // setting_infos
     this.setting_infos = {
       // type : '1',           // 0 : 그림맞추기 , 1 : 단어맞추기,
-      people :this.state.selectedOption_people,           // 인원 수
-      title : '',           // 게임 주제 : movie, cupNoodle, cookie, iceCream , food , fruit , exercise, singer, actor , title_song
-      info : "",            // 주제어,
+      people :this.state.total,           // 인원 수
+      category : this.state.category,           // 게임 주제 : movie, cupNoodle, cookie, iceCream , food , fruit , exercise, singer, actor , title_song
+      keyword : "",            // 주제어,
       spy : false
     }
 
     console.log("setting_Infos >>> ", JSON.stringify(this.setting_infos));
   }
 
+  // 사람 명수
+  settingInfos (e) {
+    console.log('e >> ' , e);
+    if (e.option === 'people') {
+      this.setState({ total: e.value });
+    } else if (e.option === 'title') {
+      this.setState({ category: e.value });
+    }
+  }
+
   render() {
-    const { selectedOption_people } = this.state;
 
-    // const { selectedOption_title } = this.state;
-
+    people_options = [];
     for (let i = 3; i< 21; i++) {
       people_options.push({
         'value' : i,
@@ -118,34 +145,26 @@ class SettingGames extends Component {
           <button>그림 맞추기</button>
           <button>단어 맞추기</button>
         </div>
-        {/* <div className="lg_btn01">
-          <button>단어 맞추기</button>
-        </div> */}
         <div className="lg_slectbox">
-          <Select readonly 
-            value={selectedOption_people}
+          <Select readonly
+            value={people_options.value}
             name="people_number"
-            onChange={this.handleChange}
+            onChange={this.settingInfos}
             options={ people_options }
             placeholder="인원 수"
           />
           <Select
+            value={title_options.value}
+            name="game_title"
             placeholder="게임 주제"
-            onChange={this.handleChange}
+            onChange={this.settingInfos}
             options = {title_options}
           />
-          {/* <Select
-            value={ selectedOption_title }
-            name="game_title"
-            onChange={ this.handleChange }
-            options={ title_options }
-            placeholder="게임 주제"
-          /> */}
         </div>
         {/* 스파이모드 선택 */}
         <div className="lg_round">
           <input type="checkbox" id="checkbox" />
-          <label htmlFor="checkbox">
+          <label onClick={this.settingInfos} htmlFor="checkbox">
             <p>스파이모드</p>
             <span className="lg_question"></span>
           </label>

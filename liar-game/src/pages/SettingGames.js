@@ -3,9 +3,6 @@ import Select from 'react-select';
 
 
 let people_options = [];
-  // { value: '3', label: '3_people' },
-  // { value: 'strawberry', label: 'Strawberry' },
-  // { value: 'vanilla', label: 'Vanilla' },
 
 const title_options = [
   { value: 'movie', label: '영화', option: 'title' },
@@ -23,48 +20,29 @@ const title_options = [
   { value: 'title_song', label: '가요 제목' , option: 'title'}
 ];
 
-// const setting_infos = {
-//   total : 3,           // 인원 수
-//   category : '',       // 게임 주제 :drama, movie, cupNoodle, cookie, iceCream , food , fruit , exercise, singer, actor , title_song
-//   keyword : "",        // 주제어,
-//   spy : false           // true : spy , false : spy X
-// }
-
-
 
 class SettingGames extends Component {
   state = {
     selectedOption_people: null,
     movieList : [],
     total : 3,
-    category : ''
-    // setting_infos : {
-    //   total : 3,           // 인원 수
-    //   category : '',       // 게임 주제 :drama, movie, cupNoodle, cookie, iceCream , food , fruit , exercise, singer, actor , title_song
-    //   keyword : "",        // 주제어,
-    //   spy : false           // true : spy , false : spy X
-    // }
+    category : '',
+    spy : false,
+    isDraw : false,
   };
 
   constructor(props) {
     super(props);
     this.settingInfos = this.settingInfos.bind(this);
     this.sendInfo = this.sendInfo.bind(this);
-    // this.setTitle = this.setTitle.bind(this);
+    this.toggleChange = this.toggleChange.bind(this);
   }
 
-  // handleChange = selectedOption_people => {
-  //   // this.httpGet("movie","20191215");
-  //   this.state.setting_infos['total'] = this.state.selectedOption_people;
-  //   // console.log("selectedOption_people >>> " , selectedOption_people);
-  //     this.setState( {setting_infos: this.state.setting_infos['total'] });
-
-  //     console.log("selectedOption_people >>> " , this.state.setting_infos['total']);
-  // };
+  toggleChange () {
+    this.setState({ isChecked: !this.state.isChecked });
+  }
 
   httpGet(type , addInfo) {
-
-    // const that = this;
 
     const request = require('request');
     let CLIENT_KEY = "";
@@ -104,27 +82,49 @@ class SettingGames extends Component {
   }
 
   sendInfo () {
-    // setting_infos
     this.setting_infos = {
-      // type : '1',           // 0 : 그림맞추기 , 1 : 단어맞추기,
       people :this.state.total,           // 인원 수
-      category : this.state.category,           // 게임 주제 : movie, cupNoodle, cookie, iceCream , food , fruit , exercise, singer, actor , title_song
-      keyword : "",            // 주제어,
-      spy : false
+      category : this.state.category,     // 게임 주제 : movie, cupNoodle, cookie, iceCream , food , fruit , exercise, singer, actor , title_song
+      keyword : "",                       // 주제어,
+      spy : this.state.spy,
+      isDraw : this.state.isDraw
     }
 
     console.log("setting_Infos >>> ", JSON.stringify(this.setting_infos));
+    // native plugin 호출
+    if (this.state.isDraw) {      // 그리기 모드
+
+    } else {
+
+    }
   }
 
-  // 사람 명수
+  // 선택된 정보 setting
   settingInfos (e) {
     console.log('e >> ' , e);
     if (e.option === 'people') {
       this.setState({ total: e.value });
     } else if (e.option === 'title') {
       this.setState({ category: e.value });
+      switch (e.value) {
+        case 'movie':
+          
+          break;
+      
+        default:
+          break;
+      }
+    }  
+    
+    else {
+      if (e.target.className === "spy") {
+        this.setState({spy : !this.state.spy });
+      } else {
+        this.setState({ isDraw: !this.state.isDraw });
+      }
     }
   }
+
 
   render() {
 
@@ -140,13 +140,9 @@ class SettingGames extends Component {
     return (
 
       <div className="lg_container01">
-        <p className="lg_title01">Liar Games</p>
-        <div className="lg_btn01">
-          <button>그림 맞추기</button>
-          <button>단어 맞추기</button>
-        </div>
+        <p className="lg_title01">라이어 게임</p>
         <div className="lg_slectbox">
-          <Select readonly
+          <Select
             value={people_options.value}
             name="people_number"
             onChange={this.settingInfos}
@@ -161,13 +157,21 @@ class SettingGames extends Component {
             options = {title_options}
           />
         </div>
-        {/* 스파이모드 선택 */}
-        <div className="lg_round">
-          <input type="checkbox" id="checkbox" />
-          <label onClick={this.settingInfos} htmlFor="checkbox">
-            <p>스파이모드</p>
-            <span className="lg_question"></span>
-          </label>
+        <div className="lg_round_wrap">
+          {/* 스파이모드 선택 */}
+          <div className="lg_round">
+            <input type="checkbox" name="spymode" onChange={this.settingInfos}  checked={this.state.spy} />
+            <label onClick={this.settingInfos} className="spy" htmlFor="checkbox">
+              <p>스파이모드</p>
+              <span className="lg_question"></span>
+            </label>
+          </div>
+          <div className="lg_round lg_round_02">
+            <input type="checkbox" name="explainmode" onChange={this.settingInfos} checked={this.state.isDraw}  />
+            <label onClick={this.settingInfos} htmlFor="checkbox">
+              <p>그림으로 설명하기</p>
+            </label>
+          </div>
         </div>
         <div className="lg_btn02">
           <button onClick={this.sendInfo}>시작하기</button>

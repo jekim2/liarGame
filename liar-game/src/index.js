@@ -4,6 +4,9 @@ import './index.css';
 import App from './App';
 import './assets/common.css';
 import * as serviceWorker from './serviceWorker';
+import jQuery from "jquery";
+window.$ = window.jQuery = jQuery;
+
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

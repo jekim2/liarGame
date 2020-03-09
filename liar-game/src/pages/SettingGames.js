@@ -1,25 +1,24 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
+import { showKeywordPlugin, openPaintPlugin } from '../assets/liarGameUtil';
+import { DRAMA } from './data';
 
 
 let people_options = [];
 
 const title_options = [
-  { value: 'movie', label: '영화', option: 'title' },
-  { value: 'sing', label: '가요' ,  option: 'title'},
-  { value: 'cookies', label: '과자' , option: 'title'},
-  { value: 'drama', label: '드라마' , option: 'title'},
-  { value: 'cupNoodle', label: '컵라면' , option: 'title'},
-  { value: 'cookie', label: '과자' , option: 'title'},
-  { value: 'iceCream', label: '아이스크림' , option: 'title'},
-  { value: 'food', label: '음식' , option: 'title'},
-  { value: 'fruit', label: '과일' , option: 'title'},
-  { value: 'exercise', label: '운동' , option: 'title'},
-  { value: 'singer', label: '가수' , option: 'title'},
-  { value: 'actor', label: '배우' , option: 'title'},
-  { value: 'title_song', label: '가요 제목' , option: 'title'}
+  { label: '영화', value: 'movie', option: 'title' },
+  { label: '가요', value: 'popularSong' ,  option: 'title'},
+  { label: '과자', value: 'cookies' , option: 'title'},
+  { label: '드라마', value: 'drama' , option: 'title'},
+  { label: '컵라면', value: 'cupNoodle' , option: 'title'},
+  { label: '아이스크림', value: 'iceCream' , option: 'title'},
+  { label: '음식', value: 'food' , option: 'title'},
+  { label: '과일', value: 'fruit' , option: 'title'},
+  { label: '운동', value: 'exercise' , option: 'title'},
+  { label: '가수', value: 'singer' , option: 'title'},
+  { label: '배우', value: 'actor' , option: 'title'},
 ];
-
 
 class SettingGames extends Component {
   state = {
@@ -27,6 +26,7 @@ class SettingGames extends Component {
     movieList : [],
     total : 3,
     category : '',
+    keyword : '',
     spy : false,
     isDraw : false,
   };
@@ -55,7 +55,6 @@ class SettingGames extends Component {
           url : `http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchWeeklyBoxOfficeList.json?key=${CLIENT_KEY}&targetDt=${aInfo}&weekGb=0`,
           type : 'get',
         }, function(error,res, body){
-
           // if (body !== null  && body !== undefined) {
           //   // that.setMovieList(body.boxOfficeResult.weeklyBoxOfficeList);
           // }
@@ -65,6 +64,8 @@ class SettingGames extends Component {
         // cf. http://www.kobis.or.kr/kobisopenapi/homepg/apiservice/searchServiceInfo.do
         break;
       case "drama":
+        this.randomItem(DRAMA);
+        break
       default:
         break;
     }
@@ -81,11 +82,16 @@ class SettingGames extends Component {
 
   }
 
+  randomItem(a) {
+    console.log('randomData >>> ' , a[Math.floor(Math.random() * a.length)]);
+    return a[Math.floor(Math.random() * a.length)];
+  }
+
   sendInfo () {
     this.setting_infos = {
       people :this.state.total,           // 인원 수
       category : this.state.category,     // 게임 주제 : movie, cupNoodle, cookie, iceCream , food , fruit , exercise, singer, actor , title_song
-      keyword : "",                       // 주제어,
+      keyword : this.state.keyword,                  // 주제어,
       spy : this.state.spy,
       isDraw : this.state.isDraw
     }
@@ -93,9 +99,11 @@ class SettingGames extends Component {
     console.log("setting_Infos >>> ", JSON.stringify(this.setting_infos));
     // native plugin 호출
     if (this.state.isDraw) {      // 그리기 모드
-
+      openPaintPlugin(this.setting_infos);
+      // liarGameUtil.showSettingViewPlugin();
     } else {
-
+      showKeywordPlugin(this.setting_infos);
+      // liarGameUtil.showKeywordPlugin(this.setting_infos);
     }
   }
 
@@ -105,17 +113,18 @@ class SettingGames extends Component {
     if (e.option === 'people') {
       this.setState({ total: e.value });
     } else if (e.option === 'title') {
-      this.setState({ category: e.value });
+      this.setState({ category: e.label });
       switch (e.value) {
         case 'movie':
-          
+          this.httpGet('movie' , '20191201');
           break;
-      
+        case 'drama':
+          this.httpGet('drama' , '20191201');
+          break;
         default:
           break;
       }
-    }  
-    
+    }
     else {
       if (e.target.className === "spy") {
         this.setState({spy : !this.state.spy });

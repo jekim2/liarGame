@@ -95,8 +95,8 @@ textarea::-webkit-input-placeholder {color:#c2c2c2;}
 .lg_btn01 button { width: 250px; padding: 10px 50px; text-align: center; border: 1px solid #fff; margin-left: 35px; margin-top: 20px; background-color: #000000 ; font-size: 0.9em; color: #fafafa;}
 .lg_btn01 button:hover { background-color: #000000;}
 .lg_slectbox { display:inline-block; width: 70%; margin-top: 20px; position: absolute; left: 15%;}
-.lg_slectbox  .css-2b097c-container {margin-top: 30px;}
-.lg_round_wrap {display: inline-block; position: absolute; top: 52%; left: 15%;}
+.lg_slectbox .css-2b097c-container {margin-top: 30px;}
+.lg_round_wrap {display: inline-block; min-height: 100px; position: absolute; top: 52%; left: 15%;}
 .lg_round_wrap:nth-child(2) {margin: 20px;}
 /* .lg_round {margin-right: 20px; } */
 .lg_round label { background-color: #fff; border: 1px solid #000000; border-radius: 50%; cursor: pointer; height: 28px; left: 0; position: absolute; width: 28px; }
@@ -111,5 +111,6 @@ textarea::-webkit-input-placeholder {color:#c2c2c2;}
 .lg_round_02 input[type="checkbox"] {visibility: hidden; margin: 10px;}
 .lg_round_02 input[type="checkbox"]:checked + label { background-color: #000000; border-color: #000000; }
 .lg_round_02 input[type="checkbox"]:checked + label:after { opacity: 1; }
+
 /* .lg_round input[name="checkbox"]:checked + label { background-color: #000000; border-color: #000000; } */
 /* .lg_question { background-image:url("../assets/images/cards_01.png")  no-repeat center bottom; background-size:50px auto;} */

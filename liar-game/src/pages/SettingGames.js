@@ -47,6 +47,7 @@ class SettingGames extends Component {
     const request = require('request');
     let CLIENT_KEY = "";
     let aInfo = addInfo;
+    let data = {};
     switch (type) {
       case "movie":
         CLIENT_KEY = '4a7dad029a526f561f97b23a72f1f410';
@@ -58,13 +59,15 @@ class SettingGames extends Component {
           // if (body !== null  && body !== undefined) {
           //   // that.setMovieList(body.boxOfficeResult.weeklyBoxOfficeList);
           // }
-          // console.log(res);
-          console.log(body);
-        });
+          // console.log(res);pr
+          data = JSON.parse(body);
+          console.log(data.boxOfficeResult.weeklyBoxOfficeList[0].movieNm);
+         this.setState({keyword : data.boxOfficeResult.weeklyBoxOfficeList[0].movieNm});
+        }.bind(this));
         // cf. http://www.kobis.or.kr/kobisopenapi/homepg/apiservice/searchServiceInfo.do
         break;
       case "drama":
-        this.randomItem(DRAMA);
+        this.setState({ keyword: this.randomItem(DRAMA) });
         break
       default:
         break;
@@ -82,16 +85,12 @@ class SettingGames extends Component {
 
   }
 
-  randomItem(a) {
-    console.log('randomData >>> ' , a[Math.floor(Math.random() * a.length)]);
-    return a[Math.floor(Math.random() * a.length)];
-  }
 
   sendInfo () {
     this.setting_infos = {
       people :this.state.total,           // 인원 수
       category : this.state.category,     // 게임 주제 : movie, cupNoodle, cookie, iceCream , food , fruit , exercise, singer, actor , title_song
-      keyword : this.state.keyword,                  // 주제어,
+      keyword : this.state.keyword,       // 주제어,
       spy : this.state.spy,
       isDraw : this.state.isDraw
     }
@@ -109,14 +108,16 @@ class SettingGames extends Component {
 
   // 선택된 정보 setting
   settingInfos (e) {
-    console.log('e >> ' , e);
+    // console.log('e >> ' , e);
     if (e.option === 'people') {
       this.setState({ total: e.value });
     } else if (e.option === 'title') {
       this.setState({ category: e.label });
       switch (e.value) {
         case 'movie':
-          this.httpGet('movie' , '20191201');
+          let date = this.randomDate(new Date(2010, 0, 1), new Date());
+          date = date.toISOString().slice(0,10).replace(/-/g,"");
+          this.httpGet('movie' , date);
           break;
         case 'drama':
           this.httpGet('drama' , '20191201');
@@ -134,6 +135,14 @@ class SettingGames extends Component {
     }
   }
 
+   randomDate(start, end) {
+    return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+  }
+
+  randomItem(a) {
+    console.log('randomData >>> ' , a[Math.floor(Math.random() * a.length)]);
+    return a[Math.floor(Math.random() * a.length)];
+  }
 
   render() {
 
@@ -152,6 +161,7 @@ class SettingGames extends Component {
         <p className="lg_title01">라이어 게임</p>
         <div className="lg_slectbox">
           <Select
+            isSearchable = {false}
             value={people_options.value}
             name="people_number"
             onChange={this.settingInfos}
@@ -159,6 +169,8 @@ class SettingGames extends Component {
             placeholder="인원 수"
           />
           <Select
+            isSearchable = {false}
+            formatOptionLabel = "readonly"
             value={title_options.value}
             name="game_title"
             placeholder="게임 주제"

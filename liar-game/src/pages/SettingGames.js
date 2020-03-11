@@ -158,6 +158,12 @@ class SettingGames extends Component {
     return (
 
       <div className="lg_container01">
+        
+      <div id="loading" class="lg_loadingWrap">
+        <div>
+          <em class="lg_load"><span></span></em>
+        </div>
+      </div>
         <p className="lg_title01">라이어 게임</p>
         <div className="lg_slectbox">
           <Select

@@ -15,7 +15,7 @@
 		var data = {
             id : "SHOW_KEYWORD",
             param : {
-                callback : "callback",
+                callback : "SelectForm.testCallback",
 				category : settingInfos.category,
 				keyword : settingInfos.keyword,
 				total : settingInfos.people,
@@ -25,6 +25,12 @@
         window.YBridge.callPlugin(JSON.stringify(data));
         // this.callPlugin(data);
     }
+
+    // export function testCallback(res){
+    //     console.log('callback res >>> ' , JSON.stringify(res));
+    // }
+
+
 
     // 그림그리기 plugin
     export function openPaintPlugin (settingInfos){

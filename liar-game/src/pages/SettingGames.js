@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Select from 'react-select';
 import { showKeywordPlugin, openPaintPlugin } from '../assets/liarGameUtil';
 import { DRAMA } from './data';
+// import { SelectForm } from '../pages/SelectForm';
 
 
 let people_options = [];
@@ -24,9 +25,11 @@ class SettingGames extends Component {
   state = {
     selectedOption_people: null,
     movieList : [],
-    total : 3,
+    total : 0,
+    value: '',
     category : '',
     keyword : '',
+    showLoading : false,
     spy : false,
     isDraw : false,
   };
@@ -36,57 +39,56 @@ class SettingGames extends Component {
     this.settingInfos = this.settingInfos.bind(this);
     this.sendInfo = this.sendInfo.bind(this);
     this.toggleChange = this.toggleChange.bind(this);
+    window["SettingGames"] = this;
   }
 
   toggleChange () {
     this.setState({ isChecked: !this.state.isChecked });
   }
 
-  httpGet(type , addInfo) {
+
+  httpGet(type) {
 
     const request = require('request');
     let CLIENT_KEY = "";
-    let aInfo = addInfo;
+    // let aInfo = addInfo;
     let data = {};
-    switch (type) {
-      case "movie":
-        CLIENT_KEY = '4a7dad029a526f561f97b23a72f1f410';
-        request({
-          // url : `http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json?key=4a7dad029a526f561f97b23a72f1f410&openStartDt=2018&openEndDt=2019`,
-          url : `http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchWeeklyBoxOfficeList.json?key=${CLIENT_KEY}&targetDt=${aInfo}&weekGb=0`,
-          type : 'get',
-        }, function(error,res, body){
-          // if (body !== null  && body !== undefined) {
-          //   // that.setMovieList(body.boxOfficeResult.weeklyBoxOfficeList);
-          // }
-          // console.log(res);pr
-          data = JSON.parse(body);
-          console.log(data.boxOfficeResult.weeklyBoxOfficeList[0].movieNm);
-         this.setState({keyword : data.boxOfficeResult.weeklyBoxOfficeList[0].movieNm});
-        }.bind(this));
-        // cf. http://www.kobis.or.kr/kobisopenapi/homepg/apiservice/searchServiceInfo.do
-        break;
-      case "drama":
-        this.setState({ keyword: this.randomItem(DRAMA) });
-        break
-      default:
-        break;
-    }
-  }
-
-  setMovieList (list) {
-
-    if (list.length > 0) {
-      list = list.filter((x) => list.movieNm);
-    }
-
-    console.log('list >>> ' , JSON.stringify(list));
-    // body
-
+    let result = false;
+    const that = this;
+    return new Promise(function (callback) {
+      switch (type) {
+        case 'movie':
+          CLIENT_KEY = '4a7dad029a526f561f97b23a72f1f410';
+          let date = that.randomDate(new Date(2010, 0, 1), new Date());
+          date = date.toISOString().slice(0,10).replace(/-/g,"");
+          request({
+            url : `http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchWeeklyBoxOfficeList.json?key=${CLIENT_KEY}&targetDt=${date}&weekGb=0`,
+            type : 'get',
+          }, function(error,res, body){
+            data = JSON.parse(body);
+            console.log(data.boxOfficeResult.weeklyBoxOfficeList[0].movieNm);
+            that.setState({keyword : data.boxOfficeResult.weeklyBoxOfficeList[0].movieNm });
+           result = true;
+           callback(result);
+          });
+          break;
+          case "drama":
+            result = true;
+            that.setState({ keyword: that.randomItem(DRAMA) });
+            callback(result);
+            break
+          default:
+            break;
+      }
+    });
   }
 
 
-  sendInfo () {
+  async sendInfo () {
+    this.setState({showLoading : true });
+
+    const result = await this.httpGet(this.state.value);
+
     this.setting_infos = {
       people :this.state.total,           // 인원 수
       category : this.state.category,     // 게임 주제 : movie, cupNoodle, cookie, iceCream , food , fruit , exercise, singer, actor , title_song
@@ -96,13 +98,15 @@ class SettingGames extends Component {
     }
 
     console.log("setting_Infos >>> ", JSON.stringify(this.setting_infos));
-    // native plugin 호출
-    if (this.state.isDraw) {      // 그리기 모드
-      openPaintPlugin(this.setting_infos);
-      // liarGameUtil.showSettingViewPlugin();
-    } else {
-      showKeywordPlugin(this.setting_infos);
-      // liarGameUtil.showKeywordPlugin(this.setting_infos);
+
+    if (result) {
+      // native plugin 호출
+      if (this.state.isDraw) {      // 그리기 모드
+        openPaintPlugin(this.setting_infos);
+      } else {
+        showKeywordPlugin(this.setting_infos);
+      }
+      this.setState({showLoading : false });
     }
   }
 
@@ -112,19 +116,8 @@ class SettingGames extends Component {
     if (e.option === 'people') {
       this.setState({ total: e.value });
     } else if (e.option === 'title') {
+      this.setState({value : e.value})
       this.setState({ category: e.label });
-      switch (e.value) {
-        case 'movie':
-          let date = this.randomDate(new Date(2010, 0, 1), new Date());
-          date = date.toISOString().slice(0,10).replace(/-/g,"");
-          this.httpGet('movie' , date);
-          break;
-        case 'drama':
-          this.httpGet('drama' , '20191201');
-          break;
-        default:
-          break;
-      }
     }
     else {
       if (e.target.className === "spy") {
@@ -134,6 +127,7 @@ class SettingGames extends Component {
       }
     }
   }
+
 
    randomDate(start, end) {
     return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
@@ -158,10 +152,10 @@ class SettingGames extends Component {
     return (
 
       <div className="lg_container01">
-        
-      <div id="loading" class="lg_loadingWrap">
+      {/* loading */}
+      <div className={"lg_loadingWrap " + (this.state.showLoading  ? '' : 'lg_none')}>
         <div>
-          <em class="lg_load"><span></span></em>
+          <em className="lg_load"><span></span></em>
         </div>
       </div>
         <p className="lg_title01">라이어 게임</p>
@@ -201,18 +195,14 @@ class SettingGames extends Component {
           </div>
         </div>
         <div className="lg_btn02">
-          <button onClick={this.sendInfo}>시작하기</button>
+          <button onClick={this.sendInfo} disabled={this.state.value === '' || this.state.total === 0} >시작하기</button>
         </div>
+        {/* <SelectForm></SelectForm> */}
       </div>
     );
   }
 }
 export default SettingGames;
-
-// 선택 안된 경우 시작하기 disabled 처리
-// loading bar
-
-
 
 
 

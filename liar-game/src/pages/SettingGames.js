@@ -46,6 +46,13 @@ class SettingGames extends Component {
     this.setState({ isChecked: !this.state.isChecked });
   }
 
+  keywordCallback(res) {
+    console.log('keywordCallback >> ' ,  JSON.stringify(res));
+    if (res.result) {
+      this.props.history.push('/selectform', JSON.stringify(this.setting_infos));
+    }
+  }
+
 
   httpGet(type) {
 
@@ -106,6 +113,7 @@ class SettingGames extends Component {
       } else {
         showKeywordPlugin(this.setting_infos);
       }
+      this.props.history.push('/selectform');
       this.setState({showLoading : false });
     }
   }

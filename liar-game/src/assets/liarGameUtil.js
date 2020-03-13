@@ -15,7 +15,7 @@
 		var data = {
             id : "SHOW_KEYWORD",
             param : {
-                callback : "SelectForm.testCallback",
+                callback : "SettingGames.keywordCallback",
 				category : settingInfos.category,
 				keyword : settingInfos.keyword,
 				total : settingInfos.people,

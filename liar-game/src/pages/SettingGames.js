@@ -79,17 +79,16 @@ class SettingGames extends Component {
            callback(result);
           });
           break;
-          case "drama":
+        case "drama":
             result = true;
             that.setState({ keyword: that.randomItem(DRAMA) });
             callback(result);
             break
-          default:
-            break;
+        default:
+          break;
       }
     });
   }
-
 
   async sendInfo () {
     this.setState({showLoading : true });
@@ -136,7 +135,6 @@ class SettingGames extends Component {
     }
   }
 
-
    randomDate(start, end) {
     return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
   }
@@ -161,11 +159,11 @@ class SettingGames extends Component {
 
       <div className="lg_container01">
       {/* loading */}
-      <div className={"lg_loadingWrap " + (this.state.showLoading  ? '' : 'lg_none')}>
-        <div>
-          <em className="lg_load"><span></span></em>
+        <div className={"lg_loadingWrap " + (this.state.showLoading  ? '' : 'lg_none')}>
+          <div>
+            <em className="lg_load"><span></span></em>
+          </div>
         </div>
-      </div>
         <p className="lg_title01">라이어 게임</p>
         <div className="lg_slectbox">
           <Select

@@ -4,8 +4,9 @@ import React, { Component } from 'react';
 class SelectForm extends Component {
 
     state = {
-        currentCount : 80,
-        isShowSelect : false
+        currentCount : 8,
+        isShowSelect : false,
+        sampleList : []
     }
 
     constructor(props) {
@@ -16,12 +17,15 @@ class SelectForm extends Component {
         this.checkScreen = this.checkScreen.bind(this);
     }
 
-    componentDidMount(){
-        const { myKey } = this.props.match.params;
-        console.log("myKey >>> " ,  JSON.stringify(myKey));
+    componentDidMount(){                        // 컴포넌트를 만들고, 첫 렌더링을 다 마친 후 실행
+        // const { myKey } = this.props.match.params;
+        // console.log("myKey >>> " ,  JSON.stringify(myKey));
+        const sampleList = JSON.parse(localStorage.getItem('sampleList'));
+        console.log('sampleList >> ' ,  JSON.stringify(sampleList));
+        
         var intervalId = setInterval(this.timer, 1000);
         // store intervalId in the state so it can be accessed later:
-        this.setState({intervalId: intervalId});
+        this.setState({intervalId: intervalId, sampleList : sampleList});
 
     }
 
@@ -44,6 +48,11 @@ class SelectForm extends Component {
     }
 
     render() {
+        // const SampleComponent = data => {
+        //     return this.state.sampleList.map((person, i) => {
+        //         return ( <td>{person}</td>);
+        //     });
+        //   };
         return(
             <div className="lg_container01 lg_container02">
                 <div className={"lg_search_wrap " + (!this.state.isShowSelect ? '' : 'lg_none')}>
@@ -61,6 +70,10 @@ class SelectForm extends Component {
                     <table>
                         <tbody>
                             <tr>
+
+                            <SampleComponent></SampleComponent>
+                            </tr>
+                            {/* <tr>
                                 <td>Lorem</td>
                                 <td>Ipsum</td>
                                 <td>Dolor</td>
@@ -94,7 +107,7 @@ class SelectForm extends Component {
                                 <td>Dolor</td>
                                 <td>test</td>
                                 <td>test1</td>
-                            </tr>
+                            </tr> */}
                         </tbody>
                     </table>
                 </div>

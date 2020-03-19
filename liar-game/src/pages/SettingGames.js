@@ -24,7 +24,7 @@ const title_options = [
 class SettingGames extends Component {
   state = {
     selectedOption_people: null,
-    movieList : [],
+    sampleList : [],
     total : 0,
     value: '',
     category : '',
@@ -73,8 +73,14 @@ class SettingGames extends Component {
             type : 'get',
           }, function(error,res, body){
             data = JSON.parse(body);
+            let moveNmList = [];
+            if (data.boxOfficeResult.weeklyBoxOfficeList.length > 0) {
+              data.boxOfficeResult.weeklyBoxOfficeList.map((x) => moveNmList.push(x.movieNm));
+            }
+            console.log(data.boxOfficeResult.weeklyBoxOfficeList)
             console.log(data.boxOfficeResult.weeklyBoxOfficeList[0].movieNm);
-            that.setState({keyword : data.boxOfficeResult.weeklyBoxOfficeList[0].movieNm });
+            that.setState({keyword : data.boxOfficeResult.weeklyBoxOfficeList[0].movieNm , sampleList : moveNmList});
+            console.log(that.state.sampleList);
            result = true;
            callback(result);
           });
@@ -100,8 +106,11 @@ class SettingGames extends Component {
       category : this.state.category,     // 게임 주제 : movie, cupNoodle, cookie, iceCream , food , fruit , exercise, singer, actor , title_song
       keyword : this.state.keyword,       // 주제어,
       spy : this.state.spy,
-      isDraw : this.state.isDraw
+      isDraw : this.state.isDraw,
+      sampleList : this.state.sampleList
     }
+
+    localStorage.setItem('sampleList', JSON.stringify(this.state.sampleList));
 
     console.log("setting_Infos >>> ", JSON.stringify(this.setting_infos));
 
@@ -123,8 +132,7 @@ class SettingGames extends Component {
     if (e.option === 'people') {
       this.setState({ total: e.value });
     } else if (e.option === 'title') {
-      this.setState({value : e.value})
-      this.setState({ category: e.label });
+      this.setState({value : e.value , category: e.label})
     }
     else {
       if (e.target.className === "spy") {
@@ -140,8 +148,15 @@ class SettingGames extends Component {
   }
 
   randomItem(a) {
-    console.log('randomData >>> ' , a[Math.floor(Math.random() * a.length)]);
-    return a[Math.floor(Math.random() * a.length)];
+    // console.log('randomData >>> ' , a[Math.floor(Math.random() * a.length)]);
+    let randomList = [];
+    for (var i = 0; i < 25; i ++ ) {
+      randomList.push(a[Math.floor(Math.random() * a.length)]);
+    }
+    this.setState({'sampleList' : randomList});
+    // console.log('randomList >> ' , randomList);
+    // console.log('randomData >> ' , randomList[0]);
+    return randomList[0];
   }
 
   render() {

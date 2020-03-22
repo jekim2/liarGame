@@ -16,6 +16,7 @@ class SelectForm extends Component {
         console.log('SelectForm >>>>>>>>>>');
         this.timer = this.timer.bind(this);
         this.checkScreen = this.checkScreen.bind(this);
+        this.selectInfo = this.selectInfo.bind(this);
     }
 
     componentDidMount(){                        // 컴포넌트를 만들고, 첫 렌더링을 다 마친 후 실행
@@ -31,6 +32,12 @@ class SelectForm extends Component {
         var intervalId = setInterval(this.timer, 1000);
         // store intervalId in the state so it can be accessed later:
         this.setState({intervalId: intervalId, sampleList : randomList});
+    }
+
+    selectInfo (e) {
+        console.log('selectInfo >> ' , e.target.innerText);
+
+        this.props.history.push('/success' ,e.target.innerText);
     }
  
  
@@ -71,49 +78,15 @@ class SelectForm extends Component {
         for (let i = 0; i < 5; i++) {
             let children = [];
             if (i !== 0) index += 5;
-            // if (i === 0) {
-            //     this.state.sampleList.slice(0,)
-            // }
-            //Inner loop to create children
             for (let j = index; j < index + 5; j++) { 
                 children.push(<td>{ this.state.sampleList[j] }</td>)
             }
-            //Create the parent and add the children
             table.push(<tr>{ children }</tr>)
         }
         return table;
     }
 
     render() {
-        // const SampleComponent = (endIndex) => {
-
-        //     // return this.state.sampleList.map((data, index) => {
-        //     // /*     switch (endIndex) {
-        //     //         case 5:
-        //     //             if (index > 0 && index < 5) return ( <td>{data}</td>);
-        //     //             break;
-        //     //         case 10:
-        //     //             if (index >= 5 && index < 10) return ( <td>{data}</td>);
-        //     //             break;
-        //     //         case 15:
-        //     //             if (index >= 10 && index < 15) return ( <td>{data}</td>);
-        //     //             break;
-        //     //         case 20:
-        //     //             if (index >= 15 && index < 20) return ( <td>{data}</td>);
-        //     //             break;
-        //     //         case 25:
-        //     //             if (index >= 20 && index < 25) return ( <td>{data}</td>);
-        //     //             break;
-        //     //         default:
-        //     //             break;
-        //     //     } */
-        //     // });
-        // }
-        // const SampleComponent = data => {
-        //     return this.state.sampleList.map((person, i) => {
-        //         return ( <td>{person}</td>);
-        //     });
-        //   };
         return(
             <div className="lg_container01 lg_container02">
                 <div className={"lg_search_wrap " + (!this.state.isShowSelect ? '' : 'lg_none')}>
@@ -129,58 +102,8 @@ class SelectForm extends Component {
                 <div className={this.state.isShowSelect ? '' : 'lg_none' }>
                     <p className="lg_title02">라이어는 선택하세요</p>
                     <table>
-                        <tbody>
+                        <tbody onClick={this.selectInfo}>
                             { this.createTable() }
-                            {/* <tr>
-                                <SampleComponent endIndex={5}></SampleComponent>
-                            </tr>
-                            <tr>
-                                <SampleComponent endIndex={10}></SampleComponent>
-                            </tr>
-                            <tr>
-                                <SampleComponent endIndex={15}></SampleComponent>
-                            </tr>
-                            <tr>
-                                <SampleComponent endIndex={20}></SampleComponent>
-                            </tr>
-                            <tr>
-                                <SampleComponent endIndex={25}></SampleComponent>
-                            </tr> */}
-                            {/* <tr>
-                                <td>Lorem</td>
-                                <td>Ipsum</td>
-                                <td>Dolor</td>
-                                <td>test</td>
-                                <td>test1</td>
-                            </tr>
-                            <tr>
-                                <td>Lorem</td>
-                                <td>Ipsum</td>
-                                <td>Dolor</td>
-                                <td>test</td>
-                                <td>test1</td>
-                            </tr>
-                            <tr>
-                                <td>Lorem</td>
-                                <td>Ipsum</td>
-                                <td>Dolor</td>
-                                <td>test</td>
-                                <td>test1</td>
-                            </tr>
-                            <tr>
-                                <td>Lorem</td>
-                                <td>Ipsum</td>
-                                <td>Dolor</td>
-                                <td>test</td>
-                                <td>test1</td>
-                            </tr>
-                            <tr>
-                                <td>Lorem</td>
-                                <td>Ipsum</td>
-                                <td>Dolor</td>
-                                <td>test</td>
-                                <td>test1</td>
-                            </tr> */}
                         </tbody>
                     </table>
                 </div>

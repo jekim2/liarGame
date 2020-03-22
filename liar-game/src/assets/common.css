@@ -92,8 +92,10 @@ textarea::-webkit-input-placeholder {color:#c2c2c2;}
 .lg_contentWrap  {height:100%; overflow:auto; -webkit-overflow-scrolling:touch;}
 .lg_container01 {min-height:100%; width: 100%; position: fixed;}
 .lg_title01 {display: block; position: relative; font-weight: bold; color: #434343;  text-align: center; font-size: 32px; margin-top: 100px;}
+.lg_title01 > span {color: #a81927;}
 .lg_title02 {display: block; position: relative; font-weight: bold; color: #434343; padding: 40px; font-size: 1.7rem;  margin-top: -50px;}
 .lg_title03 {display: block; position: absolute; font-weight: bold; color: #000; padding: 20px; font-size: 1rem; left: 0%; right: 0%; line-height: 0;}
+.font20 {font-size: 20px; margin-top: 30px;}
 .lg_container01 .lg_btn01 { position: fixed; margin: 0 auto; left:50%; transform:translateX(-50%); }
 .lg_btn01 button { width: 250px; padding: 10px 50px; text-align: center; border: 1px solid #fff; margin-left: 35px; margin-top: 20px; background-color: #000000 ; font-size: 0.9em; color: #fafafa;}
 .lg_btn01 button:hover { background-color: #000000;}
@@ -123,7 +125,6 @@ textarea::-webkit-input-placeholder {color:#c2c2c2;}
 	-webkit-animation:loading 1s linear infinite; animation:loading 1s linear infinite;
 }
 
-/* */
 .lg_container02 { top: 15%; padding: 20px; text-align: center; }
 table { margin: 0 auto;}
 table, th, td { border: 1px solid #bcbcbc; }
@@ -132,5 +133,7 @@ td {width: 75px; height: 75px;}
 .lg_search_wrap { position: relative; width: 100%;}
 .lg_search_loading {  position:absolute; left:10%; top:55%; width:60%; height:200px; margin:-14px 0 0 -14px; background:url("../assets/images/search.gif") no-repeat center center;  }
 .lg_search_wrap span {display: block; position: relative; font-weight: bold; color: #434343; padding: 40px; font-size: 1.8rem;  margin-top: 10px;}
-/* .lg_round input[name="checkbox"]:checked + label { background-color: #000000; border-color: #000000; } */
-/* .lg_question { background-image:url("../assets/images/cards_01.png")  no-repeat center bottom; background-size:50px auto;} */
+.lg_box01 {display: block; border: 1px solid #ccc; position: relative; border-radius: 5px; width: 70%; height: 150px;  margin: 0 auto; margin-top: 70px; background-color: white; height: 150px;
+	margin: 0 auto; margin-top: 70px; background-color: white; border: 1px solid #ccc; text-align: center;}
+.lg_box01 > span { display: block; color: #0083b7;font-size: 1.5rem; font-weight: bold; padding: 20px;}
+.lg_box01 > p {color: #f77f55; font-size: 1.3rem; font-weight: bold;}

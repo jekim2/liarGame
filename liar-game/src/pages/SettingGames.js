@@ -12,13 +12,13 @@ const title_options = [
   { label: '가요', value: 'popularSong' ,  option: 'title'},
   { label: '과자', value: 'cookies' , option: 'title'},
   { label: '드라마', value: 'drama' , option: 'title'},
-  { label: '컵라면', value: 'cupNoodle' , option: 'title'},
+  { label: '채소', value: 'vegetable', option: 'title'},
   { label: '아이스크림', value: 'iceCream' , option: 'title'},
   { label: '음식', value: 'food' , option: 'title'},
   { label: '과일', value: 'fruit' , option: 'title'},
   { label: '운동', value: 'exercise' , option: 'title'},
-  { label: '가수', value: 'singer' , option: 'title'},
-  { label: '배우', value: 'actor' , option: 'title'},
+  { label: '연예인', value: 'entertainer' , option: 'title'},
+  { label : '직업' , value : 'job', option : 'title'}
 ];
 
 class SettingGames extends Component {

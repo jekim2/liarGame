@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
 import { showKeywordPlugin, openPaintPlugin } from '../assets/liarGameUtil';
-import { DRAMA } from './data';
+import { DRAMA, ENTERTAINER, FRUIT } from './data';
 // import { SelectForm } from '../pages/SelectForm';
 
 
@@ -29,7 +29,7 @@ class SettingGames extends Component {
     value: '',
     category : '',
     keyword : '',
-    showLoading : false,
+    showLoading : true,
     spy : false,
     isDraw : false,
   };
@@ -42,14 +42,29 @@ class SettingGames extends Component {
     window["SettingGames"] = this;
   }
 
+  componentDidMount() {
+    console.log('componentDidMount >>> ');
+    setTimeout(() => {
+      this.setState({ showLoading: false });
+    }, 500);
+  }
+
+  componentWillUnmount() {
+    this.setState({ showLoading: false });
+  }
+
+
   toggleChange () {
     this.setState({ isChecked: !this.state.isChecked });
   }
 
   keywordCallback(res) {
+    console.log('keywordCallback >>> ');
+    this.setState({ showLoading: true });
+
     console.log('keywordCallback >> ' ,  JSON.stringify(res));
     if (res.result) {
-      this.props.history.push('/selectform', JSON.stringify(this.setting_infos));
+      localStorage.setItem('keywordCallback', JSON.stringify(res));
     }
   }
 
@@ -89,7 +104,17 @@ class SettingGames extends Component {
             result = true;
             that.setState({ keyword: that.randomItem(DRAMA) });
             callback(result);
-            break
+            break;
+        case "entertainer" :
+          result = true;
+          that.setState({ keyword: that.randomItem(ENTERTAINER) });
+          callback(result);
+          break;
+        case "fruit" :
+          result = true;
+          that.setState({ keyword: that.randomItem(FRUIT) });
+          callback(result);
+          break;
         default:
           break;
       }
@@ -97,7 +122,7 @@ class SettingGames extends Component {
   }
 
   async sendInfo () {
-    this.setState({showLoading : true });
+    this.setState({ showLoading : true });
 
     const result = await this.httpGet(this.state.value);
 
@@ -110,7 +135,7 @@ class SettingGames extends Component {
       sampleList : this.state.sampleList
     }
 
-    localStorage.setItem('sampleList', JSON.stringify(this.state.sampleList));
+    localStorage.setItem('setting_infos', JSON.stringify(this.setting_infos));
 
     console.log("setting_Infos >>> ", JSON.stringify(this.setting_infos));
 
@@ -121,8 +146,10 @@ class SettingGames extends Component {
       } else {
         showKeywordPlugin(this.setting_infos);
       }
-      this.props.history.push('/selectform');
-      this.setState({showLoading : false });
+      this.setState({ showLoading : false });
+      setTimeout(() => {
+        this.props.history.push('/selectform');
+      }, 1000);
     }
   }
 
@@ -171,7 +198,6 @@ class SettingGames extends Component {
     }
 
     return (
-
       <div className="lg_container01">
       {/* loading */}
         <div className={"lg_loadingWrap " + (this.state.showLoading  ? '' : 'lg_none')}>
@@ -179,46 +205,48 @@ class SettingGames extends Component {
             <em className="lg_load"><span></span></em>
           </div>
         </div>
-        <p className="lg_title01">라이어 게임</p>
-        <div className="lg_slectbox">
-          <Select
-            isSearchable = {false}
-            value={people_options.value}
-            name="people_number"
-            onChange={this.settingInfos}
-            options={ people_options }
-            placeholder="인원 수"
-          />
-          <Select
-            isSearchable = {false}
-            formatOptionLabel = "readonly"
-            value={title_options.value}
-            name="game_title"
-            placeholder="게임 주제"
-            onChange={this.settingInfos}
-            options = {title_options}
-          />
-        </div>
-        <div className="lg_round_wrap">
-          {/* 스파이모드 선택 */}
-          <div className="lg_round">
-            <input type="checkbox" name="spymode" onChange={this.settingInfos}  checked={this.state.spy} />
-            <label onClick={this.settingInfos} className="spy" htmlFor="checkbox">
-              <p>스파이모드</p>
-              <span className="lg_question"></span>
-            </label>
+        <div className={ this.state.showLoading  ? 'lg_none' : '' }>
+          <p className="lg_title01">라이어 게임</p>
+          <div className="lg_slectbox">
+            <Select
+              isSearchable = {false}
+              value={people_options.value}
+              name="people_number"
+              onChange={this.settingInfos}
+              options={ people_options }
+              placeholder="인원 수"
+            />
+            <Select
+              isSearchable = {false}
+              formatOptionLabel = "readonly"
+              value={title_options.value}
+              name="game_title"
+              placeholder="게임 주제"
+              onChange={this.settingInfos}
+              options = {title_options}
+            />
           </div>
-          <div className="lg_round lg_round_02">
-            <input type="checkbox" name="explainmode" onChange={this.settingInfos} checked={this.state.isDraw}  />
-            <label onClick={this.settingInfos} htmlFor="checkbox">
-              <p>그림으로 설명하기</p>
-            </label>
+          <div className="lg_round_wrap">
+            {/* 스파이모드 선택 */}
+            <div className="lg_round">
+              <input type="checkbox" name="spymode" onChange={this.settingInfos}  checked={this.state.spy} />
+              <label onClick={this.settingInfos} className="spy" htmlFor="checkbox">
+                <p>스파이모드</p>
+                <span className="lg_question"></span>
+              </label>
+            </div>
+            <div className="lg_round lg_round_02">
+              <input type="checkbox" name="explainmode" onChange={this.settingInfos} checked={this.state.isDraw}  />
+              <label onClick={this.settingInfos} htmlFor="checkbox">
+                <p>그림으로 설명하기</p>
+              </label>
+            </div>
           </div>
+          <div className="lg_btn02">
+            <button onClick={this.sendInfo} disabled={this.state.value === '' || this.state.total === 0} >시작하기</button>
+          </div>
+
         </div>
-        <div className="lg_btn02">
-          <button onClick={this.sendInfo} disabled={this.state.value === '' || this.state.total === 0} >시작하기</button>
-        </div>
-        {/* <SelectForm></SelectForm> */}
       </div>
     );
   }

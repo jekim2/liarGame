@@ -135,5 +135,15 @@ td {width: 75px; height: 75px;}
 .lg_search_wrap span {display: block; position: relative; font-weight: bold; color: #434343; padding: 40px; font-size: 1.8rem;  margin-top: 10px;}
 .lg_box01 {display: block; border: 1px solid #ccc; position: relative; border-radius: 5px; width: 70%; height: 150px;  margin: 0 auto; margin-top: 70px; background-color: white; height: 150px;
 	margin: 0 auto; margin-top: 70px; background-color: white; border: 1px solid #ccc; text-align: center;}
-.lg_box01 > span { display: block; color: #0083b7;font-size: 1.5rem; font-weight: bold; padding: 20px;}
-.lg_box01 > p {color: #f77f55; font-size: 1.3rem; font-weight: bold;}
+.lg_box01 > span { display: block; color: #0083b7;font-size: 1.5rem; font-weight: bold; padding: 27px;}
+.lg_box01 > p {color: #f77f55; font-size: 1.3rem; font-weight: bold;} /**#ca1717 */
+.lg_box01 .lg_box01_redcolor {color: #ca1717; font-size: 1.3rem; font-weight: bold; }
+.lg_container01 .lg_btn_revert { position:absolute; right:30%; bottom: 5%; width:35px; height:28px; margin:-14px 0 0 -14px; background:url("../assets/images/revert.PNG") no-repeat center center; background-size:100% auto; text-indent: -99999rem;}
+.lg_btn_restart { position: absolute; padding: 5px; right: 16%; bottom: 5%; line-height: 1.5; font-size: 12px;}
+
+
+
+/** test */
+#cont1 {position: static; background-color: lightcoral;}
+#cont2 {position: static; background-color: lightgreen;}
+#cont3 {position: static; background-color: lightblue;}

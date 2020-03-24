@@ -13,7 +13,7 @@ class SelectForm extends Component {
     constructor(props) {
         super(props);
         window["SelectForm"] = this;
-        console.log('SelectForm >>>>>>>>>>');
+        console.log('SelectForm >>>>>>>>>>' , this.props);
         this.timer = this.timer.bind(this);
         this.checkScreen = this.checkScreen.bind(this);
         this.selectInfo = this.selectInfo.bind(this);
@@ -22,36 +22,24 @@ class SelectForm extends Component {
     componentDidMount(){                        // 컴포넌트를 만들고, 첫 렌더링을 다 마친 후 실행
         // const { myKey } = this.props.match.params;
         // console.log("myKey >>> " ,  JSON.stringify(myKey));
-        const sampleList = JSON.parse(localStorage.getItem('sampleList'));
-        console.log('sampleList >> ' ,  JSON.stringify(sampleList));
+        const setting_infos = JSON.parse(localStorage.getItem('setting_infos'));
+        console.log('sampleList >> ' ,  JSON.stringify(setting_infos.sampleList));
 
         const randomList = [];
         for (var i = 0; i < 25; i ++ ) {
-            randomList.push(sampleList[Math.floor(Math.random() * sampleList.length)]);
+            randomList.push(setting_infos.sampleList[Math.floor(Math.random() * setting_infos.sampleList.length)]);
         }
         var intervalId = setInterval(this.timer, 1000);
         // store intervalId in the state so it can be accessed later:
         this.setState({intervalId: intervalId, sampleList : randomList});
     }
 
+
     selectInfo (e) {
         console.log('selectInfo >> ' , e.target.innerText);
 
         this.props.history.push('/success' ,e.target.innerText);
     }
- 
- 
-    // randomItem(a) {
-    //     // console.log('randomData >>> ' , a[Math.floor(Math.random() * a.length)]);
-    //     let randomList = [];
-    //     for (var i = 0; i < 25; i ++ ) {
-    //         randomList.push(a[Math.floor(Math.random() * a.length)]);
-    //     }
-    //     this.setState({'sampleList' : randomList});
-    //     // console.log('randomList >> ' , randomList);
-    //     // console.log('randomData >> ' , randomList[0]);
-    //     return randomList[0];
-    // }
 
     // 이벤트, setTimeout, 외부 라이브러리 인스턴스 제거
     componentWillUnmount() {

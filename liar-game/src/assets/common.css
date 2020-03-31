@@ -144,6 +144,6 @@ td {width: 75px; height: 75px;}
 
 
 /** test */
-#cont1 {position: static; background-color: lightcoral;}
-#cont2 {position: static; background-color: lightgreen;}
-#cont3 {position: static; background-color: lightblue;}
+#cont1 {position: relative; background-color: lightcoral; width: 200px; height: 200px;}
+#cont2 {position: relative; background-color: lightgreen; width: 200px; height: 200px;}
+#cont3 {position: relative; background-color: lightblue; width: 200px; height: 200px;}

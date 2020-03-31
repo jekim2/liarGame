@@ -147,6 +147,7 @@ class SettingGames extends Component {
         showKeywordPlugin(this.setting_infos);
       }
       this.setState({ showLoading : false });
+      console.log('current path >>> ' , this.props.location.pathname);
       setTimeout(() => {
         this.props.history.push('/selectform');
       }, 1000);

@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 class SelectForm extends Component {
 
     state = {
-        currentCount : 0,
+        currentCount : 70,
         isShowSelect : false,
         sampleList : []
     }
@@ -22,7 +22,9 @@ class SelectForm extends Component {
     componentDidMount(){                        // 컴포넌트를 만들고, 첫 렌더링을 다 마친 후 실행
         // const { myKey } = this.props.match.params;
         // console.log("myKey >>> " ,  JSON.stringify(myKey));
-        const setting_infos = JSON.parse(localStorage.getItem('setting_infos'));
+        let setting_infos = JSON.parse(localStorage.getItem('setting_infos'));
+        // web test
+        setting_infos = {"people":3,"category":"과일","keyword":"패션후르츠","spy":false,"isDraw":false,"sampleList":["패션후르츠","커스터드애플","구아바","자몽","자몽","람부탄","앵두","오디","포도","산톨","청포도","자몽","체리","망고스틴","잭후르츠","스네이크후르츠","리치","라임","잭후르츠","파인애플","자두","스네이크후르츠","거봉","두리안","한라봉"]}
         console.log('sampleList >> ' ,  JSON.stringify(setting_infos.sampleList));
 
         const randomList = [];

@@ -8,9 +8,9 @@ class LoadingForm extends Component {
         return (
             <div>
                 loadingWrap
-                <div id="#cont1"></div>
-                <div id="#cont2"></div>
-                <div id="#cont3"></div>
+                <div id="cont1"></div>
+                <div id="cont2"></div>
+                <div id="cont3"></div>
             </div>
             //   <div>
             //     <NavForm/>

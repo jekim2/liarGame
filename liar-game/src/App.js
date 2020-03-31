@@ -3,6 +3,8 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import SettingGames from './pages/SettingGames';
 import SelectForm from './pages/SelectForm';
 import Success from './pages/Success';
+import LoadingForm from './pages/LoadingForm';
+// import IndexRoute from 'react-router';
 
 function App() {
   return (
@@ -10,11 +12,13 @@ function App() {
       <div>
         <Switch>
           <Route exact path="/" component={SettingGames} />
-          <Route path="/selectform" component={SelectForm} />
+          {/* <Route path="/selectform" component={SelectForm} />
           <Route path="/success" component={Success} />
+          <Route path="/loading" component={LoadingForm} /> */}
         </Switch>
       </div>
     </BrowserRouter>
+
   );
 }
 

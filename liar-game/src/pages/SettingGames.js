@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
-import { showKeywordPlugin, openPaintPlugin } from '../assets/liarGameUtil';
+import { mobileCheck,showKeywordPlugin, openPaintPlugin } from '../assets/liarGameUtil';
 import { DRAMA, ENTERTAINER, FRUIT } from './data';
-// import { SelectForm } from '../pages/SelectForm';
-
 
 let people_options = [];
 
@@ -34,6 +32,8 @@ class SettingGames extends Component {
     isDraw : false,
   };
 
+  moveNmList = [];
+
   constructor(props) {
     super(props);
     this.settingInfos = this.settingInfos.bind(this);
@@ -63,11 +63,23 @@ class SettingGames extends Component {
     this.setState({ showLoading: true });
 
     console.log('keywordCallback >> ' ,  JSON.stringify(res));
-    if (res.result) {
-      localStorage.setItem('keywordCallback', JSON.stringify(res));
+    localStorage.setItem('keywordCallback', JSON.stringify(res));
+    if (!this.state.isDraw) {
+      this.props.history.push('/selectform');
+      this.setState({ showLoading : false });
+    } else {
+      openPaintPlugin(this.setting_infos);
     }
   }
 
+  paintCallback(res) {
+    this.setState({ showLoading: true });
+    console.log('paintCallback res >>> ' ,  JSON.stringify(res));
+    if (res.result) {
+      this.props.history.push('/selectform');
+      this.setState({ showLoading : false });
+    }
+  }
 
   httpGet(type) {
 
@@ -88,16 +100,22 @@ class SettingGames extends Component {
             type : 'get',
           }, function(error,res, body){
             data = JSON.parse(body);
-            let moveNmList = [];
+
+            console.log('data >>> ' , JSON.stringify(data));
+            // let moveNmList = [];
             if (data.boxOfficeResult.weeklyBoxOfficeList.length > 0) {
-              data.boxOfficeResult.weeklyBoxOfficeList.map((x) => moveNmList.push(x.movieNm));
+              data.boxOfficeResult.weeklyBoxOfficeList.map((x) => that.state.sampleList.push(x.movieNm));
             }
-            console.log(data.boxOfficeResult.weeklyBoxOfficeList)
-            console.log(data.boxOfficeResult.weeklyBoxOfficeList[0].movieNm);
-            that.setState({keyword : data.boxOfficeResult.weeklyBoxOfficeList[0].movieNm , sampleList : moveNmList});
+            that.setState({keyword : data.boxOfficeResult.weeklyBoxOfficeList[0].movieNm , sampleList :  that.state.sampleList});
+            // console.log(data.boxOfficeResult.weeklyBoxOfficeList)
+            // console.log(data.boxOfficeResult.weeklyBoxOfficeList[0].movieNm);
             console.log(that.state.sampleList);
-           result = true;
-           callback(result);
+
+            if (that.state.sampleList.length >= 25) {
+              callback(true);
+            } else {
+              callback(false);
+            }
           });
           break;
         case "drama":
@@ -126,31 +144,42 @@ class SettingGames extends Component {
 
     const result = await this.httpGet(this.state.value);
 
-    this.setting_infos = {
-      people :this.state.total,           // 인원 수
-      category : this.state.category,     // 게임 주제 : movie, cupNoodle, cookie, iceCream , food , fruit , exercise, singer, actor , title_song
-      keyword : this.state.keyword,       // 주제어,
-      spy : this.state.spy,
-      isDraw : this.state.isDraw,
-      sampleList : this.state.sampleList
+    console.log('result >>> ' , result);
+
+    if(result) {
+      this.setting_infos = {
+        people :this.state.total,           // 인원 수
+        category : this.state.category,     // 게임 주제 : movie, cupNoodle, cookie, iceCream , food , fruit , exercise, singer, actor , title_song
+        keyword : this.state.keyword,       // 주제어,
+        spy : this.state.spy,
+        isDraw : this.state.isDraw,
+        sampleList : this.state.sampleList
+      }
+
+      localStorage.setItem('setting_infos', JSON.stringify(this.setting_infos));
+
+      console.log("setting_Infos >>> ", JSON.stringify(this.setting_infos));
+
     }
 
-    localStorage.setItem('setting_infos', JSON.stringify(this.setting_infos));
 
-    console.log("setting_Infos >>> ", JSON.stringify(this.setting_infos));
 
-    if (result) {
-      // native plugin 호출
-      if (this.state.isDraw) {      // 그리기 모드
-        openPaintPlugin(this.setting_infos);
-      } else {
+    if (mobileCheck()) {
+      if (result) {
         showKeywordPlugin(this.setting_infos);
+      } else {
+        this.httpGet('movie');
       }
-      this.setState({ showLoading : false });
-      console.log('current path >>> ' , this.props.location.pathname);
-      setTimeout(() => {
+    } else {
+      if (result) {
         this.props.history.push('/selectform');
-      }, 1000);
+      } else {
+        if(this.state.value === 'movie') {
+          setTimeout(() => {
+            this.httpGet('movie');
+          }, 1000);
+        }
+      }
     }
   }
 
@@ -176,13 +205,19 @@ class SettingGames extends Component {
   }
 
   randomItem(a) {
-    // console.log('randomData >>> ' , a[Math.floor(Math.random() * a.length)]);
     let randomList = [];
-    for (var i = 0; i < 25; i ++ ) {
-      randomList.push(a[Math.floor(Math.random() * a.length)]);
+    for (var i = 0; i < 100; i ++ ) {
+      console.log('randomData >>> ' , a[Math.floor(Math.random() * a.length)]);
+      if (randomList.length <= 25 && randomList.indexOf(a[Math.floor(Math.random() * a.length)]) < 0) {
+        randomList.push(a[Math.floor(Math.random() * a.length)]);
+      }
+      if (randomList.length === 25) {
+        console.log('randomList.length ?>> ' , randomList.length);
+        break;
+      }
     }
     this.setState({'sampleList' : randomList});
-    // console.log('randomList >> ' , randomList);
+    console.log('randomList >> ' , randomList);
     // console.log('randomData >> ' , randomList[0]);
     return randomList[0];
   }

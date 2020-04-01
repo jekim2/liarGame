@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-// import { SAMPLELIST } from './data';
-
+import { mobileCheck } from '../assets/liarGameUtil';
 
 class SelectForm extends Component {
 
@@ -23,14 +22,17 @@ class SelectForm extends Component {
         // const { myKey } = this.props.match.params;
         // console.log("myKey >>> " ,  JSON.stringify(myKey));
         let setting_infos = JSON.parse(localStorage.getItem('setting_infos'));
-        // web test
-        setting_infos = {"people":3,"category":"과일","keyword":"패션후르츠","spy":false,"isDraw":false,"sampleList":["패션후르츠","커스터드애플","구아바","자몽","자몽","람부탄","앵두","오디","포도","산톨","청포도","자몽","체리","망고스틴","잭후르츠","스네이크후르츠","리치","라임","잭후르츠","파인애플","자두","스네이크후르츠","거봉","두리안","한라봉"]}
-        console.log('sampleList >> ' ,  JSON.stringify(setting_infos.sampleList));
 
-        const randomList = [];
-        for (var i = 0; i < 25; i ++ ) {
-            randomList.push(setting_infos.sampleList[Math.floor(Math.random() * setting_infos.sampleList.length)]);
+        console.log('setting_infos >>>> ', JSON.stringify(setting_infos));
+        // web test
+        if (!mobileCheck()) {
+            setting_infos = {"people":3,"category":"과일","keyword":"패션후르츠","spy":false,"isDraw":false,"sampleList":["패션후르츠","커스터드애플","구아바","자몽","자몽","람부탄","앵두","오디","포도","산톨","청포도","자몽","체리","망고스틴","잭후르츠","스네이크후르츠","리치","라임","잭후르츠","파인애플","자두","스네이크후르츠","거봉","두리안","한라봉"]}
         }
+
+        const randomList = setting_infos.sampleList.sort(()=> Math.random()- Math.random());
+
+        console.log('randomList >>>> ', randomList);
+
         var intervalId = setInterval(this.timer, 1000);
         // store intervalId in the state so it can be accessed later:
         this.setState({intervalId: intervalId, sampleList : randomList});
@@ -39,8 +41,7 @@ class SelectForm extends Component {
 
     selectInfo (e) {
         console.log('selectInfo >> ' , e.target.innerText);
-
-        this.props.history.push('/success' ,e.target.innerText);
+        this.props.history.push(`/success:${e.target.innerText}`)
     }
 
     // 이벤트, setTimeout, 외부 라이브러리 인스턴스 제거

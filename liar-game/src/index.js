@@ -9,4 +9,6 @@ import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
+document.getElementById('intro_loading').classList.add('lg_none');
+
 serviceWorker.unregister();

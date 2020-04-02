@@ -25,19 +25,26 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>React App</title>
+    <style type="text/css">
+      .lg_loadingWrap {position: fixed; left: 0; top: 0 !important; right: 0; bottom: 0; color: #fff; text-align: center; background: rgba(0,0,0,.7); z-index: 200; }
+      .lg_load:before {content:""; position:absolute; left:50%; top:50%; width:45px; height:28px; margin:-14px 0 0 -14px; background:url("../assets/images/Heart-1s-200px.gif") no-repeat center center; background-size:100% auto;
+        -webkit-animation:loading 1s linear infinite; animation:loading 1s linear infinite;
+      }
+    </style>
+    <script type="text/JavaScript">
+      function backButton() {
+        console.log('backbutton>>>');
+        return;
+      }
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div class="lg_loadingWrap" id="intro_loading">
+      <div>
+        <em class="lg_load"><span></span></em>
+      </div>
+    </div>
     <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
   </body>
 </html>

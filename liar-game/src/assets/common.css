@@ -140,7 +140,7 @@ td {width: 75px; height: 75px;}
 .lg_box01 .lg_box01_redcolor {color: #ca1717; font-size: 1.3rem; font-weight: bold; }
 .lg_container01 .lg_btn_revert { position:absolute; right:30%; bottom: 5%; width:35px; height:28px; margin:-14px 0 0 -14px; background:url("../assets/images/revert.PNG") no-repeat center center; background-size:100% auto; text-indent: -99999rem;}
 .lg_btn_restart { position: absolute; padding: 5px; right: 16%; bottom: 5%; line-height: 1.5; font-size: 12px;}
-
+.lg_intro {content:""; position:fixed; left:0; top:0; width:100%; height:100%; background:url("../assets/images/bg_splash_01.jpg")  no-repeat center center; background-size:auto 110%; z-index:1; -webkit-animation:logbg_ani 6s 3s linear infinite, logbg_ani_op 6s 3s linear infinite; animation:logbg_ani 6s 3s linear infinite, logbg_ani_op 6s 3s linear infinite; opacity:0; will-change:transform;}
 
 
 /** test */

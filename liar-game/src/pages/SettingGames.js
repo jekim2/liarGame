@@ -85,7 +85,6 @@ class SettingGames extends Component {
 
     const request = require('request');
     let CLIENT_KEY = "";
-    // let aInfo = addInfo;
     let data = {};
     let result = false;
     const that = this;
@@ -95,6 +94,7 @@ class SettingGames extends Component {
           CLIENT_KEY = '4a7dad029a526f561f97b23a72f1f410';
           let date = that.randomDate(new Date(2010, 0, 1), new Date());
           date = date.toISOString().slice(0,10).replace(/-/g,"");
+          console.log('date >>. ' , date);
           request({
             url : `http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchWeeklyBoxOfficeList.json?key=${CLIENT_KEY}&targetDt=${date}&weekGb=0`,
             type : 'get',
@@ -104,25 +104,40 @@ class SettingGames extends Component {
             console.log('data >>> ' , JSON.stringify(data));
             // let moveNmList = [];
             if (data.boxOfficeResult.weeklyBoxOfficeList.length > 0) {
-              data.boxOfficeResult.weeklyBoxOfficeList.map((x) => that.state.sampleList.push(x.movieNm));
+              for(var i = 0; data.boxOfficeResult.weeklyBoxOfficeList.length; i++) {
+                if (that.state.sampleList.length <= 25) {
+                  that.state.sampleList.push(data.boxOfficeResult.weeklyBoxOfficeList[i].movieNm);
+                }
+              }
             }
-            that.setState({keyword : data.boxOfficeResult.weeklyBoxOfficeList[0].movieNm , sampleList :  that.state.sampleList});
-            // console.log(data.boxOfficeResult.weeklyBoxOfficeList)
-            // console.log(data.boxOfficeResult.weeklyBoxOfficeList[0].movieNm);
-            console.log(that.state.sampleList);
-
             if (that.state.sampleList.length >= 25) {
-              callback(true);
+              that.setting_infos = {
+                people :that.state.total,           // 인원 수
+                category : that.state.category,     // 게임 주제 : movie, cupNoodle, cookie, iceCream , food , fruit , exercise, singer, actor , title_song
+                keyword :  that.state.sampleList[0],       // 주제어,
+                spy : that.state.spy,
+                isDraw : that.state.isDraw,
+                sampleList : that.state.sampleList
+              }
+              that.setState({keyword : that.state.sampleList[0] , sampleList :  that.state.sampleList});
+              console.log(that.state.sampleList);
+  
+              localStorage.setItem('setting_infos', JSON.stringify(that.setting_infos));
+              if(mobileCheck()) {
+                showKeywordPlugin(that.setting_infos);
+              } else {
+                that.props.history.push('/selectform');
+              }
             } else {
-              callback(false);
+              that.httpGet('movie');
             }
           });
           break;
         case "drama":
-            result = true;
-            that.setState({ keyword: that.randomItem(DRAMA) });
-            callback(result);
-            break;
+          result = true;
+          that.setState({ keyword: that.randomItem(DRAMA) });
+          callback(result);
+          break;
         case "entertainer" :
           result = true;
           that.setState({ keyword: that.randomItem(ENTERTAINER) });
@@ -155,37 +170,21 @@ class SettingGames extends Component {
         isDraw : this.state.isDraw,
         sampleList : this.state.sampleList
       }
+        localStorage.setItem('setting_infos', JSON.stringify(this.setting_infos));
 
-      localStorage.setItem('setting_infos', JSON.stringify(this.setting_infos));
+        console.log("setting_Infos >>> ", JSON.stringify(this.setting_infos));
 
-      console.log("setting_Infos >>> ", JSON.stringify(this.setting_infos));
-
-    }
-
-
-
-    if (mobileCheck()) {
-      if (result) {
+      if (mobileCheck()) {
         showKeywordPlugin(this.setting_infos);
       } else {
-        this.httpGet('movie');
-      }
-    } else {
-      if (result) {
         this.props.history.push('/selectform');
-      } else {
-        if(this.state.value === 'movie') {
-          setTimeout(() => {
-            this.httpGet('movie');
-          }, 1000);
-        }
       }
     }
   }
 
   // 선택된 정보 setting
   settingInfos (e) {
-    // console.log('e >> ' , e);
+    console.log('e >> ' , e);
     if (e.option === 'people') {
       this.setState({ total: e.value });
     } else if (e.option === 'title') {
@@ -267,14 +266,14 @@ class SettingGames extends Component {
             <div className="lg_round">
               <input type="checkbox" name="spymode" onChange={this.settingInfos}  checked={this.state.spy} />
               <label onClick={this.settingInfos} className="spy" htmlFor="checkbox">
-                <p>스파이모드</p>
+                <p onClick={this.settingInfos} className="spy">스파이모드</p>
                 <span className="lg_question"></span>
               </label>
             </div>
             <div className="lg_round lg_round_02">
               <input type="checkbox" name="explainmode" onChange={this.settingInfos} checked={this.state.isDraw}  />
-              <label onClick={this.settingInfos} htmlFor="checkbox">
-                <p>그림으로 설명하기</p>
+              <label onClick={this.settingInfos} className="paint" htmlFor="checkbox">
+                <p  onClick={this.settingInfos} className="paint">그림으로 설명하기</p>
               </label>
             </div>
           </div>
@@ -289,144 +288,3 @@ class SettingGames extends Component {
 }
 export default SettingGames;
 
-
-
-    // // const querystring = require('querystring');
-
-    // let str = '베테랑';
-    // // let encodedStr = querystring.escape(str);
-
-    // let kakaoOptions = {
-    //   // uri:`https://dapi.kakao.com/v2/local/search/keyword.json?query=${str}`,
-    //   uri:`https://dapi.kakao.com/v2/search/web?query=${str}`,
-    //   method:'GET',
-    //   headers:{
-    //           'Authorization': 'KakaoAK ef5135ef7fc05129d26e9d4d61d63363'
-    //   },
-    //   encoding:'utf-8'
-    // }
-
-    //  function callback(error,res, body){
-    //   console.log(res);
-    //   console.log(body)
-    // }
-    // request(kakaoOptions,callback);
-
-
-    // const option = {
-    //   uri : `https://openapi.naver.com/v1/search/movie.json?query=${str}`,
-    //   method: 'GET',
-    //   headers : {
-    //     'X-Naver-Client-Id' : 'H0CLikr465hhOVkwJm2Q',
-    //     'X-Naver-Client-Secret' : 'yXJORf7cvO'
-    //   },
-    // }
-
-    // function callback(error,res, body){
-    //   console.log(JSON.stringify(res));
-    //   console.log(JSON.stringify(body));
-    //   console.log(JSON.stringify(error));
-    // }
-    // request(option,callback);
-
-    
-    // // 영화 client id
-    // // const mClient_id = "4a7dad029a526f561f97b23a72f1f410";
-
-    // const option = {
-    //   url : 'http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchWeeklyBoxOfficeList.json?key=4a7dad029a526f561f97b23a72f1f410&targetDt=20191201&weekGb=0',
-    //   type : 'get',
-    // }
-
-    // function callback(error,res, body){
-    //   console.log(JSON.stringify(res));
-    //   // console.log(JSON.stringify($.parseJSON(body)));
-    //   // console.log(JSON.stringify(error));
-    // }
-    // request(option,callback);
-
-
-
-
-
-    // const uri ='http://openapi.jbfood.go.kr:8080/openapi/service/FoodDictionaryService/getFoodDictionary?ServiceKey=mvg2sTC9kU65ua19lKF4rKgRUqciZrN4f6GzpZlijmhUDAQWN9Jboi1HwvFBuJ2a6ylNdmKNhOHQlHJJdulBqw';
-
-    // let foodOption = {
-    //   // uri : 'http://openapi.jbfood.go.kr:8080/openapi/service/FoodDictionaryService/getFoodDictionary?ServiceKey=mvg2sTC9kU65ua19lKF4rKgRUqciZrN4f6GzpZlijmhUDAQWN9Jboi1HwvFBuJ2a6ylNdmKNhOHQlHJJdulBqw',	
-    //   method : 'GET',
-    //   // key : "mvg2sTC9kU65ua19lKF4rKgRUqciZrN4f6GzpZlijmhUDAQWN9Jboi1HwvFBuJ2a6ylNdmKNhOHQlHJJdulBqw%3D%3D"
-    // }
-
-    // const client_id = "la9V3Vf9ibIJhOS5r5aa";
-    // const client_secret = "gajYALWiMV";
-
-    // const uri = `https://openapi.naver.com/v1/search/movie.json?query=${str}`;
- 
-    // const option = {
-    //   uri : uri,
-    //   method: 'GET',
-    //   headers : {
-    //     'X-Naver-Client-Id' : client_id,
-    //     'X-Naver-Client-Secret' : client_secret
-    //   }
-    // }
-
-    // function callback(error,res, body){
-    //   console.log(res);
-    //   console.log(body)
-    // }
-    // request(option,callback);
-
-
-    // const request = require('request');
-    // const NAVER_CLIENT_ID     = 'la9V3Vf9ibIJhOS5r5aa';
-    // const NAVER_CLIENT_SECRET = 'gajYALWiMV';
-    // // const option = {
-    // //   query  :'최신 영화', //이미지 검색 텍스트
-    // //   start  :1, //검색 시작 위치
-    // //   display:50, //가져올 이미지 갯수
-    // // }
-
-    // let str = '베테랑';
-    
-    // request.get({
-    //   uri:`https://openapi.naver.com/v1/search/movie.json?query=${str}`,
-    //   // qs :option,
-    //   headers:{
-    //     'X-Naver-Client-Id':NAVER_CLIENT_ID,
-    //     'X-Naver-Client-Secret':NAVER_CLIENT_SECRET,
-    //   },
-    //   mode : 'no-cors',
-    //   encoding:'utf-8'
-    // }, function(err, res, body) {
-    //   // let json = JSON.parse(body) //json으로 파싱
-    //   console.log(JSON.stringify(res));
-    // });
-
-    // const express = require('express');
-    // const app = express();
-//     const client_id = 'la9V3Vf9ibIJhOS5r5aa';
-//     const client_secret = 'gajYALWiMV';
-//     const str ='베테랑';
-//   // app.get('/search/blog', function (req, res) {
-//    const api_url = `https://openapi.naver.com/v1/search/movie.json?query=${str}`; // json 결과
-// //   const api_url = 'https://openapi.naver.com/v1/search/blog.xml?query=' + encodeURI(req.query.query); // xml 결과
-//    const request = require('request');
-//    const options = {
-//        url: api_url,
-//       //  mode : 'no-cors',
-//        headers: {'X-Naver-Client-Id':client_id, 'X-Naver-Client-Secret': client_secret}
-//     };
-//    request.get(options, function (error, response, body) {
-//      console.log(error);
-//      console.log(response);
-//      console.log(body);
-//     //  if (!error && response.statusCode == 200) {
-//     //    res.writeHead(200, {'Content-Type': 'text/json;charset=utf-8'});
-//     //    res.end(body);
-//     //  } else {
-//     //    res.status(response.statusCode).end();
-//     //    console.log('error = ' + response.statusCode);
-//     //  }
-//    });
-//  });

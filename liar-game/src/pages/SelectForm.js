@@ -12,15 +12,12 @@ class SelectForm extends Component {
     constructor(props) {
         super(props);
         window["SelectForm"] = this;
-        console.log('SelectForm >>>>>>>>>>' , this.props);
         this.timer = this.timer.bind(this);
         this.checkScreen = this.checkScreen.bind(this);
         this.selectInfo = this.selectInfo.bind(this);
     }
 
     componentDidMount(){                        // 컴포넌트를 만들고, 첫 렌더링을 다 마친 후 실행
-        // const { myKey } = this.props.match.params;
-        // console.log("myKey >>> " ,  JSON.stringify(myKey));
         let setting_infos = JSON.parse(localStorage.getItem('setting_infos'));
 
         console.log('setting_infos >>>> ', JSON.stringify(setting_infos));

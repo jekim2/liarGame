@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
 import { mobileCheck,showKeywordPlugin, openPaintPlugin } from '../assets/liarGameUtil';
-import { DRAMA, ENTERTAINER, FRUIT } from './data';
+import { DRAMA, ENTERTAINER, FRUIT, JOB } from './data';
 
 let people_options = [];
 
@@ -146,6 +146,11 @@ class SettingGames extends Component {
         case "fruit" :
           result = true;
           that.setState({ keyword: that.randomItem(FRUIT) });
+          callback(result);
+          break;
+        case "job" :
+          result = true;
+          that.setState({ keyword: that.randomItem(JOB) });
           callback(result);
           break;
         default:

@@ -104,8 +104,9 @@ class SettingGames extends Component {
             console.log('data >>> ' , JSON.stringify(data));
             // let moveNmList = [];
             if (data.boxOfficeResult.weeklyBoxOfficeList.length > 0) {
-              for(var i = 0; data.boxOfficeResult.weeklyBoxOfficeList.length; i++) {
+              for(var i = 0; i < data.boxOfficeResult.weeklyBoxOfficeList.length; i++) {
                 if (that.state.sampleList.length <= 25) {
+                  console.log('movieNm >>  ' , data.boxOfficeResult.weeklyBoxOfficeList[i].movieNm);
                   that.state.sampleList.push(data.boxOfficeResult.weeklyBoxOfficeList[i].movieNm);
                 }
               }

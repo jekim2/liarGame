@@ -61,24 +61,48 @@ class SettingGames extends Component {
 
   keywordCallback(res) {
     console.log('keywordCallback >>> ');
-    this.setState({ showLoading: true });
 
-    console.log('keywordCallback >> ' ,  JSON.stringify(res));
-    localStorage.setItem('keywordCallback', JSON.stringify(res));
-    if (!this.state.isDraw) {
-      this.props.history.push('/selectform');
-      this.setState({ showLoading : false });
+    if(!res.result) {
+      var data = {
+        id : "APP_EXIT",
+        param : {
+          callback : "",
+          type : "restart" //restart , exit
+        }
+      }
+      window.YBridge.callPlugin(JSON.stringify(data))
+
     } else {
-      openPaintPlugin(this.setting_infos);
+      this.setState({ showLoading: true });
+
+      console.log('keywordCallback >> ' ,  JSON.stringify(res));
+      localStorage.setItem('keywordCallback', JSON.stringify(res));
+      if (!this.state.isDraw) {
+        this.props.history.push('/selectform');
+        this.setState({ showLoading : false });
+      } else {
+        openPaintPlugin(this.setting_infos);
+      }
     }
   }
 
   paintCallback(res) {
-    this.setState({ showLoading: true });
-    console.log('paintCallback res >>> ' ,  JSON.stringify(res));
-    if (res.result) {
-      this.props.history.push('/selectform');
-      this.setState({ showLoading : false });
+    if(!res.result) {
+      var data = {
+        id : "APP_EXIT",
+        param : {
+          callback : "",
+          type : "restart" //restart , exit
+        }
+      }
+      window.YBridge.callPlugin(JSON.stringify(data))
+    } else {
+      this.setState({ showLoading: true });
+      console.log('paintCallback res >>> ' ,  JSON.stringify(res));
+      if (res.result) {
+        this.props.history.push('/selectform');
+        this.setState({ showLoading : false });
+      }
     }
   }
 

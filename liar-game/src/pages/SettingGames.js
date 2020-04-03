@@ -1,22 +1,23 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
 import { mobileCheck,showKeywordPlugin, openPaintPlugin } from '../assets/liarGameUtil';
-import { DRAMA, ENTERTAINER, FRUIT, JOB, EXERCISE, FOOD, ICECREAME } from './data';
+import { DRAMA, ENTERTAINER, FRUIT, JOB, EXERCISE, FOOD, ICECREAME, COOKIES, KITCHEN } from './data';
 
 let people_options = [];
 
 const title_options = [
   { label: '영화', value: 'movie', option: 'title' },
-  { label: '가요', value: 'popularSong' ,  option: 'title'},
   { label: '과자', value: 'cookies' , option: 'title'},
   { label: '드라마', value: 'drama' , option: 'title'},
-  { label: '채소', value: 'vegetable', option: 'title'},
   { label: '아이스크림', value: 'iceCream' , option: 'title'},
   { label: '음식', value: 'food' , option: 'title'},
   { label: '과일', value: 'fruit' , option: 'title'},
   { label: '운동', value: 'exercise' , option: 'title'},
   { label: '연예인', value: 'entertainer' , option: 'title'},
-  { label : '직업' , value : 'job', option : 'title'}
+  { label : '직업' , value : 'job', option : 'title'},
+  { label : '부엌' , value: 'kitchen' , option: 'title'}
+  // { label: '가요', value: 'popularSong' ,  option: 'title'},
+  // { label: '채소', value: 'vegetable', option: 'title'},
 ];
 
 class SettingGames extends Component {
@@ -167,6 +168,16 @@ class SettingGames extends Component {
         case "iceCream" :
           result = true;
           that.setState({ keyword: that.randomItem(ICECREAME) });
+          callback(result);
+          break;
+        case "cookies" :
+          result = true;
+          that.setState({ keyword: that.randomItem(COOKIES) });
+          callback(result);
+          break;
+        case "kitchen" :
+          result = true;
+          that.setState({ keyword: that.randomItem(KITCHEN) });
           callback(result);
           break;
         default:

@@ -33,19 +33,36 @@
     </style>
     <script type="text/JavaScript">
       function backButton() {
-        var data = {
-          id : "SHOW_DIALOG",
-          param : {
-            callback : "dialogcallback",
-            title : "타이틀",
-            type : "normal",          //"ver", "hori"
-            btnName1 : "계속 하기",   //첫번째 버튼 텍스트
-            btnName2 : "다시 하기",   //두번째 버튼 텍스트
-            btnName3 : "종료 하기"    //세번째 버튼 텍스트
+        // console.log('window.location.href >> ' , window.location.href);
+        if (window.location.href !== "") {
+          let location = String(window.location.href).split("#/");
+          // console.log('location >>> ', location);
+          if(location[1] === "") {
+            var data = {
+              id : "SHOW_DIALOG",
+              param : {
+                callback : "dialogcallback",
+                title : "타이틀",
+                type : "normal",          //"ver", "hori"
+                btnName1 : "계속 하기",   //첫번째 버튼 텍스트
+                btnName3 : "종료 하기"    //세번째 버튼 텍스트
+              }
+            }
+          } else {
+            var data = {
+              id : "SHOW_DIALOG",
+              param : {
+                callback : "dialogcallback",
+                title : "타이틀",
+                type : "normal",          //"ver", "hori"
+                btnName1 : "계속 하기",   //첫번째 버튼 텍스트
+                btnName2 : "다시 하기",   //두번째 버튼 텍스트
+                btnName3 : "종료 하기"    //세번째 버튼 텍스트
+              }
+            }
           }
         }
         window.YBridge.callPlugin(JSON.stringify(data));
-        return;
       }
       function dialogcallback(res) {
         console.log('res >>>> ' , JSON.stringify(res));
@@ -74,6 +91,7 @@
             break;
           }
       }
+    }
     </script>
   </head>
   <body>
